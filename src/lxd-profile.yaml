@@ -1,0 +1,6 @@
+config:
+  linux.kernel_modules: kvm
+devices:
+  kvm:
+    path: /dev/kvm
+    type: unix-char

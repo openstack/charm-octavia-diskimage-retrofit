@@ -1,0 +1,27 @@
+includes:
+  - layer:openstack
+  - layer:snap
+  - interface:juju-info
+  - interface:keystone-credentials
+options:
+  basic:
+    use_venv: True
+    include_system_packages: True
+    packages: [ 'libffi-dev', 'libssl-dev' ]
+  snap:
+    octavia-diskimage-retrofit:
+      comment: |
+        Using devmode pending resolution of snapd fuse-support issue
+        https://github.com/openstack-charmers/octavia-diskimage-retrofit/issues/6
+      channel: edge
+      devmode: True
+resources:
+  octavia-diskimage-retrofit:
+    type: file
+    filename: octavia-diskimage-retrofit.snap
+repo: https://github.com/openstack/charm-octavia-diskimage-retrofit
+config:
+  deletes:
+    - verbose
+    - use-internal-endpoints
+    - use-syslog

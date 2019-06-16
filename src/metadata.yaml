@@ -1,0 +1,18 @@
+name: octavia-diskimage-retrofit
+summary: Tool for retrofitting cloud image for use as Octavia Amphora
+maintainer: OpenStack Charmers <openstack-charmers@lists.ubuntu.com>
+description: |
+  Tool for retrofitting cloud image for use as Octavia Amphora
+tags:
+  - openstack
+series:
+  - bionic
+  - cosmic
+  - disco
+subordinate: true
+requires:
+  juju-info:
+    interface: juju-info
+    scope: container
+  identity-credentials:
+    interface: keystone-credentials
