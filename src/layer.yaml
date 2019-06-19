@@ -1,8 +1,10 @@
 includes:
   - layer:openstack
   - layer:snap
+  - layer:tls-client
   - interface:juju-info
   - interface:keystone-credentials
+  - interface:tls-certificates
 options:
   basic:
     use_venv: True
@@ -10,11 +12,11 @@ options:
     packages: [ 'libffi-dev', 'libssl-dev' ]
   snap:
     octavia-diskimage-retrofit:
-      comment: |
-        Using devmode pending resolution of snapd fuse-support issue
-        https://github.com/openstack-charmers/octavia-diskimage-retrofit/issues/6
       channel: edge
       devmode: True
+comment: |
+  Using devmode pending resolution of snapd fuse-support issue
+  https://github.com/openstack-charmers/octavia-diskimage-retrofit/issues/6
 resources:
   octavia-diskimage-retrofit:
     type: file
