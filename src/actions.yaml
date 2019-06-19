@@ -1,0 +1,17 @@
+retrofit-image:
+  description: |
+    Trigger image retrofitting process
+  params:
+    source-image:
+      type: string
+      default: ''
+      description: |
+        Optionally specify ID of image in Glance to use as source for the
+        retrofitting.  The default is to automatically select the most
+        recent Ubuntu Server or Minimal daily Cloud image.
+    force:
+      type: boolean
+      default: False
+      description: |
+        Force re-retrofitting image despite presence of apparently up to
+        date target image.
