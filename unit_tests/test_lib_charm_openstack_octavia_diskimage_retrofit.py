@@ -68,13 +68,17 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
         c = octavia_diskimage_retrofit.OctaviaDiskimageRetrofitCharm()
         with mock.patch('charm.openstack.octavia_diskimage_retrofit.open',
                         create=True) as mocked_open:
+            self.glance_retrofitter.find_destination_image.return_value = \
+                [fake_image]
             with self.assertRaises(Exception):
                 c.retrofit('aKeystone')
             self.glance_retrofitter.session_from_identity_credentials.\
                 assert_called_once_with('aKeystone')
             self.glance_retrofitter.get_glance_client.assert_called_once_with(
                 self.glance_retrofitter.session_from_identity_credentials())
-            self.glance_retrofitter.find_destination_image.return_value = None
+
+            self.glance_retrofitter.find_destination_image.return_value = \
+                []
             c.retrofit('aKeystone')
             self.NamedTemporaryFile.assert_has_calls([
                 mock.call(delete=False,

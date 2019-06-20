@@ -27,6 +27,14 @@ import charm.openstack.glance_retrofitter as glance_retrofitter
 TMPDIR = '/var/snap/octavia-diskimage-retrofit/common/tmp'
 
 
+class SourceImageNotFound(Exception):
+    pass
+
+
+class DestinationImageExists(Exception):
+    pass
+
+
 class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
     release = 'rocky'
     name = 'octavia-diskimage-retrofit'
@@ -54,28 +62,30 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
         :type force: bool
         :param image_id: Use specific source image for retrofitting
         :type image_id: str
-        :raises:Exception
+        :raises:SourceImageNotFound,DestinationImageExists
         """
         session = glance_retrofitter.session_from_identity_credentials(
             keystone_endpoint)
         glance = glance_retrofitter.get_glance_client(session)
 
         if image_id:
-            source_image = glance.images.list(filters={'id': image_id})
+            source_image = next(glance.images.list(filters={'id': image_id}))
         else:
             source_image = glance_retrofitter.find_source_image(glance)
         if not source_image:
-            raise Exception('unable to find suitable source image')
+            raise SourceImageNotFound('unable to find suitable source image')
 
         if not image_id:
-            existing_image = glance_retrofitter.find_destination_image(
-                glance, source_image.product_name, source_image.version_name)
-            if existing_image and not force:
-                raise Exception('image with product_name "{}" and '
-                                'version_name "{}" already exists: "{}"'
-                                .format(source_image.product_name,
-                                        source_image.version_name,
-                                        existing_image.id))
+            for image in glance_retrofitter.find_destination_image(
+                    glance,
+                    source_image.product_name,
+                    source_image.version_name):
+                if not force:
+                    raise DestinationImageExists(
+                        'image with product_name "{}" and '
+                        'version_name "{}" already exists: "{}"'
+                        .format(source_image.product_name,
+                                source_image.version_name, image.id))
 
         input_file = tempfile.NamedTemporaryFile(delete=False, dir=TMPDIR)
         ch_core.hookenv.atexit(os.unlink, input_file.name)
