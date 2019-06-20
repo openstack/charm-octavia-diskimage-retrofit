@@ -13,6 +13,8 @@
 # limitations under the License.
 
 import mock
+import os
+import subprocess
 
 import charms_openstack.test_utils as test_utils
 
@@ -39,3 +41,71 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
             c.name,
             project='services',
             domain='service_domain')
+
+    def test_retrofit(self):
+        self.patch_object(octavia_diskimage_retrofit, 'glance_retrofitter')
+        glance = mock.MagicMock()
+        self.glance_retrofitter.get_glance_client.return_value = glance
+
+        class FakeImage(object):
+            id = 'aId'
+            name = 'aName'
+            architecture = 'aArchitecture'
+            os_distro = 'aOSDistro'
+            os_version = 'aOSVersion'
+            version_name = 'aVersionName'
+            product_name = 'aProductName'
+        fake_image = FakeImage()
+
+        glance.images.create.return_value = fake_image
+        self.glance_retrofitter.find_source_image.return_value = fake_image
+        self.patch_object(
+            octavia_diskimage_retrofit.tempfile,
+            'NamedTemporaryFile')
+        self.patch_object(octavia_diskimage_retrofit.ch_core, 'hookenv')
+        self.patch_object(octavia_diskimage_retrofit.subprocess,
+                          'check_output')
+        c = octavia_diskimage_retrofit.OctaviaDiskimageRetrofitCharm()
+        with mock.patch('charm.openstack.octavia_diskimage_retrofit.open',
+                        create=True) as mocked_open:
+            with self.assertRaises(Exception):
+                c.retrofit('aKeystone')
+            self.glance_retrofitter.session_from_identity_credentials.\
+                assert_called_once_with('aKeystone')
+            self.glance_retrofitter.get_glance_client.assert_called_once_with(
+                self.glance_retrofitter.session_from_identity_credentials())
+            self.glance_retrofitter.find_destination_image.return_value = None
+            c.retrofit('aKeystone')
+            self.NamedTemporaryFile.assert_has_calls([
+                mock.call(delete=False,
+                          dir=octavia_diskimage_retrofit.TMPDIR),
+                mock.call(delete=False,
+                          dir=octavia_diskimage_retrofit.TMPDIR),
+            ])
+            self.hookenv.atexit.assert_called_with(os.unlink, mock.ANY)
+            self.hookenv.status_set.assert_has_calls([
+                mock.call('maintenance', 'Downloading aName'),
+                mock.call('maintenance', 'Retrofitting aName'),
+                mock.call('maintenance', 'Uploading aName'),
+            ])
+            self.glance_retrofitter.download_image.assert_called_once_with(
+                glance, fake_image, self.NamedTemporaryFile())
+            self.hookenv.config.assert_called_once_with('retrofit-uca-pocket')
+            self.check_output.assert_called_once_with(
+                ['octavia-diskimage-retrofit', '-d', '-u',
+                 self.hookenv.config(), self.NamedTemporaryFile().name,
+                 self.NamedTemporaryFile().name],
+                stderr=subprocess.STDOUT, universal_newlines=True)
+            glance.images.create.assert_called_once_with(
+                container_format='bare',
+                disk_format='qcow2',
+                name='amphora-haproxy-aArchitecture-aOSDistro-aOSVersion-'
+                     'aVersionName')
+            glance.images.upload.assert_called_once_with('aId', mock.ANY)
+            mocked_open.assert_called_once_with(
+                self.NamedTemporaryFile().name, 'rb')
+            glance.images.update.assert_called_once_with(
+                'aId',
+                source_product_name='aProductName',
+                source_version_name='aVersionName',
+                tags=['octavia-diskimage-retrofit', 'octavia-amphora'])
