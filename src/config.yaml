@@ -1,0 +1,7 @@
+options:
+  retrofit-uca-pocket:
+    type: string
+    default: 'rocky'
+    description: |
+      Name of Ubuntu Cloud Archive pocket to add to the image being
+      retrofitted.

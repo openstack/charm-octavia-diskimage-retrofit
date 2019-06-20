@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import mock
 import sys
 
 sys.path.append('src')
@@ -20,3 +21,12 @@ sys.path.append('src/lib')
 # Mock out charmhelpers so that we can test without it.
 import charms_openstack.test_mocks  # noqa
 charms_openstack.test_mocks.mock_charmhelpers()
+
+global glanceclient
+global keystoneauth1
+glanceclient = mock.MagicMock()
+keystoneauth1 = mock.MagicMock()
+sys.modules['glanceclient'] = glanceclient
+sys.modules['keystoneauth1'] = keystoneauth1
+sys.modules['keystoneauth1.loading'] = keystoneauth1.loading
+sys.modules['keystoneauth1.session'] = keystoneauth1.session

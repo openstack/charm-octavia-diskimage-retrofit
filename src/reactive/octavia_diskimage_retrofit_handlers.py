@@ -26,6 +26,7 @@ charm.use_defaults(
 
 @reactive.when_not('charm.installed')
 def check_snap_installed():
+    # Installation is handled by the ``snap`` layer, just update our status.
     with charm.provide_charm_instance() as instance:
         instance.assess_status()
     reactive.set_flag('charm.installed')
@@ -38,3 +39,10 @@ def request_credentials():
         'identity-credentials.connected')
     with charm.provide_charm_instance() as instance:
         instance.request_credentials(keystone_endpoint)
+        instance.assess_status()
+
+
+@reactive.when('identity-credentials.available')
+def credentials_available():
+    with charm.provide_charm_instance() as instance:
+        instance.assess_status()

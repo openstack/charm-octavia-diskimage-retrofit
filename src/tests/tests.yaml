@@ -1,11 +1,15 @@
 charm_name: octavia-diskimage-retrofit
 smoke_bundles:
 - bionic-rocky
+gate_bundles:
+- bionic-rocky
+- bionic-stein
+- disco
+dev_bundles:
+- eoan
 target_deploy_status:
   glance-simplestreams-sync:
     workload-status: active
     workload-status-message: Sync completed
-configure:
-- zaza.charm_tests.noop.setup.basic_setup
 tests:
-- zaza.charm_tests.noop.tests.NoopTest
+- zaza.openstack.charm_tests.octavia.diskimage_retrofit.tests.OctaviaDiskimageRetrofitTest

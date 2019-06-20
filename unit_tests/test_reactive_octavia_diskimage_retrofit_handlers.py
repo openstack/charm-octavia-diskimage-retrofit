@@ -29,6 +29,10 @@ class TestRegisteredHooks(test_utils.TestRegisteredHooks):
             'when': {
                 'request_credentials': (
                     'identity-credentials.connected',),
+                'credentials_available': (
+                    'identity-credentials.available',),
+                'build': (
+                    'octavia-diskimage-retrofit.build',),
             },
             'when_not': {
                 'check_snap_installed': (
@@ -67,3 +71,8 @@ class TestOctaviaDiskimageRetrofitHandlers(test_utils.PatchHelper):
             'identity-credentials.connected')
         self.charm_instance.request_credentials.assert_called_once_with(
             'endpoint')
+        self.charm_instance.assess_status.assert_called_once_with()
+
+    def test_credentials_available(self):
+        handlers.credentials_available()
+        self.charm_instance.assess_status.assert_called_once_with()
