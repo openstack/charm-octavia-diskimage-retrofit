@@ -4,8 +4,11 @@ smoke_bundles:
 gate_bundles:
 - bionic-rocky
 - bionic-stein
-- disco
+comment: |
+  Deployment on Disco and onwards will not work until we resolve
+  https://bugs.launchpad.net/bugs/1824112
 dev_bundles:
+- disco
 - eoan
 target_deploy_status:
   glance-simplestreams-sync:
