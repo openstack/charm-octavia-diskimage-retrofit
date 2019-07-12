@@ -79,6 +79,7 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
 
             self.glance_retrofitter.find_destination_image.return_value = \
                 []
+            self.hookenv.config.side_effect = ['pocket', True]
             c.retrofit('aKeystone')
             self.NamedTemporaryFile.assert_has_calls([
                 mock.call(delete=False,
@@ -94,10 +95,9 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
             ])
             self.glance_retrofitter.download_image.assert_called_once_with(
                 glance, fake_image, self.NamedTemporaryFile())
-            self.hookenv.config.assert_called_once_with('retrofit-uca-pocket')
             self.check_output.assert_called_once_with(
-                ['octavia-diskimage-retrofit', '-d', '-u',
-                 self.hookenv.config(), self.NamedTemporaryFile().name,
+                ['octavia-diskimage-retrofit', '-u', 'pocket', '-d',
+                 self.NamedTemporaryFile().name,
                  self.NamedTemporaryFile().name],
                 stderr=subprocess.STDOUT, universal_newlines=True)
             glance.images.create.assert_called_once_with(

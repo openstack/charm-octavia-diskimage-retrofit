@@ -100,11 +100,13 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
         ch_core.hookenv.status_set('maintenance',
                                    'Retrofitting {}'
                                    .format(source_image.name))
-        subprocess.check_output(
-            ['octavia-diskimage-retrofit', '-d',
-             '-u', ch_core.hookenv.config('retrofit-uca-pocket'),
-             input_file.name, output_file.name],
-            stderr=subprocess.STDOUT, universal_newlines=True)
+        cmd = ['octavia-diskimage-retrofit',
+               '-u', ch_core.hookenv.config('retrofit-uca-pocket')]
+        if ch_core.hookenv.config('debug'):
+            cmd.append('-d')
+        cmd.extend([input_file.name, output_file.name])
+        subprocess.check_output(cmd, stderr=subprocess.STDOUT,
+                                universal_newlines=True)
 
         # NOTE(fnordahl) the manifest is stored within the image itself in
         # ``/etc/dib-manifests``.  A copy of the manifest is saved on the host
