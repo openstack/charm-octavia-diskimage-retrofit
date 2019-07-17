@@ -1,9 +1,9 @@
 charm_name: octavia-diskimage-retrofit
 smoke_bundles:
-- bionic-rocky
-gate_bundles:
-- bionic-rocky
 - bionic-stein
+gate_bundles:
+- bionic-stein
+- bionic-rocky
 comment: |
   Deployment on Disco and onwards will not work until we resolve
   https://bugs.launchpad.net/bugs/1824112
