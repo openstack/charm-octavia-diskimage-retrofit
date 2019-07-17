@@ -16,3 +16,13 @@ requires:
     scope: container
   identity-credentials:
     interface: keystone-credentials
+resources:
+  snapd:
+    type: file
+    filename: snapd.snap
+  core18:
+    type: file
+    filename: core18.snap
+  octavia-diskimage-retrofit:
+    type: file
+    filename: octavia-diskimage-retrofit.snap

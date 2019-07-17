@@ -17,10 +17,6 @@ options:
 comment: |
   Using devmode pending resolution of snapd fuse-support issue
   https://github.com/openstack-charmers/octavia-diskimage-retrofit/issues/6
-resources:
-  octavia-diskimage-retrofit:
-    type: file
-    filename: octavia-diskimage-retrofit.snap
 repo: https://github.com/openstack/charm-octavia-diskimage-retrofit
 config:
   deletes:
