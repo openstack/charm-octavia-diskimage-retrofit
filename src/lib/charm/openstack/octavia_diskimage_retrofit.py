@@ -62,7 +62,8 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
         :type force: bool
         :param image_id: Use specific source image for retrofitting
         :type image_id: str
-        :raises:SourceImageNotFound,DestinationImageExists
+        :raises:SourceImageNotFound,DestinationImageExists,
+                subprocess.CalledProcessError
         """
         session = glance_retrofitter.session_from_identity_credentials(
             keystone_endpoint)
@@ -105,8 +106,16 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
         if ch_core.hookenv.config('debug'):
             cmd.append('-d')
         cmd.extend([input_file.name, output_file.name])
-        subprocess.check_output(cmd, stderr=subprocess.STDOUT,
-                                universal_newlines=True)
+        try:
+            output = subprocess.check_output(cmd, stderr=subprocess.STDOUT,
+                                             universal_newlines=True)
+            ch_core.hookenv.log('Output from "{}": "{}"'.format(cmd, output),
+                                level=ch_core.hookenv.DEBUG)
+        except subprocess.CalledProcessError as e:
+            ch_core.hookenv.log('Call to "{}" failed, output: "{}"'
+                                .format(cmd, e.output),
+                                level=ch_core.hookenv.ERROR)
+            raise
 
         # NOTE(fnordahl) the manifest is stored within the image itself in
         # ``/etc/dib-manifests``.  A copy of the manifest is saved on the host
@@ -137,3 +146,6 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
             source_product_name=source_image.product_name or 'custom',
             source_version_name=source_image.version_name or 'custom',
             tags=[self.name, 'octavia-amphora'])
+        ch_core.hookenv.log('Successfully created image "{}" with id "{}"'
+                            .format(dest_image.name, dest_image.id),
+                            level=ch_core.hookenv.INFO)

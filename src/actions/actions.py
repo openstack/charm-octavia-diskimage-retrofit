@@ -61,8 +61,13 @@ def main(args):
         return 'Action {} is undefined'.format(action_name)
 
     try:
+        ch_core.hookenv.log('Running action "{}"'.format(action_name),
+                            level=ch_core.hookenv.DEBUG)
         action(args)
     except Exception as e:
+        ch_core.hookenv.log('action "{}" failed: "{}"'
+                            .format(action_name, str(e)),
+                            level=ch_core.hookenv.ERROR)
         ch_core.hookenv.action_fail(str(e))
 
 
