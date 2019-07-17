@@ -79,7 +79,8 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
 
             self.glance_retrofitter.find_destination_image.return_value = \
                 []
-            self.hookenv.config.side_effect = ['pocket', True]
+            self.hookenv.config.side_effect = ['pocket', True,
+                                               'octavia-amphora']
             c.retrofit('aKeystone')
             self.NamedTemporaryFile.assert_has_calls([
                 mock.call(delete=False,

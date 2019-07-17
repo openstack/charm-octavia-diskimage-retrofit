@@ -5,3 +5,12 @@ options:
     description: |
       Name of Ubuntu Cloud Archive pocket to add to the image being
       retrofitted.
+  amp-image-tag:
+    type: string
+    default: ''
+    description: |
+      When set the charm will add tag to any newly created images.
+      .
+      Note that the charm will allways add the ``octavia-diskimage-retrofit``
+      tag to created images, this is for convenience and may be used by the
+      charm for housekeeping in the future.

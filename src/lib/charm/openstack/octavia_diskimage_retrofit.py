@@ -141,11 +141,15 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
         with open(output_file.name, 'rb') as fin:
             glance.images.upload(dest_image.id, fin)
 
+        tags = [self.name]
+        custom_tag = ch_core.hookenv.config('amp-image-tag')
+        if custom_tag:
+            tags.append(custom_tag)
         glance.images.update(
             dest_image.id,
             source_product_name=source_image.product_name or 'custom',
             source_version_name=source_image.version_name or 'custom',
-            tags=[self.name, 'octavia-amphora'])
+            tags=tags)
         ch_core.hookenv.log('Successfully created image "{}" with id "{}"'
                             .format(dest_image.name, dest_image.id),
                             level=ch_core.hookenv.INFO)
