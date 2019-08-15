@@ -7,7 +7,7 @@ tags:
   - openstack
 series:
   - bionic
-  - cosmic
+  - eoan
   - disco
 subordinate: true
 requires:
