@@ -1,5 +1,2 @@
 keystoneauth1
 python-glanceclient
-
-jinja2
-psutil
