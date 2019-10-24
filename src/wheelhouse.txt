@@ -1,2 +1,4 @@
 keystoneauth1
 python-glanceclient
+
+git+https://opendev.org/openstack/charms.openstack.git@stable/19.10#egg=charms.openstack
