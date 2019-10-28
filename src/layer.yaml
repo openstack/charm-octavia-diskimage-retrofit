@@ -12,7 +12,7 @@ options:
     packages: [ 'libffi-dev', 'libssl-dev' ]
   snap:
     octavia-diskimage-retrofit:
-      channel: edge
+      channel: beta
       devmode: True
 comment: |
   Using devmode pending resolution of snapd fuse-support issue
