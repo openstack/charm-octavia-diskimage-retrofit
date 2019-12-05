@@ -10,6 +10,9 @@ options:
     use_venv: True
     include_system_packages: False
     packages: [ 'libffi-dev', 'libssl-dev' ]
+    # python_packages replaces using src/wheelhouse.txt till
+    # layer-basic issues #149 is resolved.
+    python_packages: [ 'keystoneauth1', 'python-glanceclient' ]
   snap:
     octavia-diskimage-retrofit:
       channel: beta
