@@ -107,8 +107,26 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
             cmd.append('-d')
         cmd.extend([input_file.name, output_file.name])
         try:
-            output = subprocess.check_output(cmd, stderr=subprocess.STDOUT,
-                                             universal_newlines=True)
+            # We want to pass the [juju-]{http,https,ftp,no}-proxy model
+            # configs as envvars (http_proxy, HTTP_PROXY, https_proxy, etc.) to
+            # octavia-diskimage-retrofit.
+            #
+            # env_proxy_settings() returns a dict with these envvars. See
+            # https://github.com/juju/charm-helpers/pull/248
+            #
+            # It is then up to octavia-diskimage-retrofit to make use of them
+            # or not. This fixes
+            # https://bugs.launchpad.net/charm-octavia-diskimage-retrofit/+bug/1843510
+            proxy_envvars = ch_core.hookenv.env_proxy_settings()
+            ch_core.hookenv.log('proxy_envvars: {}'.format(proxy_envvars),
+                                level=ch_core.hookenv.DEBUG)
+
+            envvars = os.environ.copy()
+            if proxy_envvars is not None:
+                envvars.update(proxy_envvars)
+            output = subprocess.check_output(
+                cmd, stderr=subprocess.STDOUT, universal_newlines=True,
+                env=envvars)
             ch_core.hookenv.log('Output from "{}": "{}"'.format(cmd, output),
                                 level=ch_core.hookenv.DEBUG)
         except subprocess.CalledProcessError as e:

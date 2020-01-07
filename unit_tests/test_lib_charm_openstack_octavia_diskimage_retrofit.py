@@ -57,6 +57,13 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
             product_name = 'aProductName'
         fake_image = FakeImage()
 
+        proxy_envvars = {
+            'http_proxy': 'http://squid.internal:3128',
+            'HTTP_PROXY': 'http://squid.internal:3128',
+            'no_proxy': 'jujucharms.com',
+            'NO_PROXY': 'jujucharms.com',
+        }
+
         glance.images.create.return_value = fake_image
         self.glance_retrofitter.find_source_image.return_value = fake_image
         self.patch_object(
@@ -81,6 +88,7 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
                 []
             self.hookenv.config.side_effect = ['pocket', True,
                                                'octavia-amphora']
+            self.hookenv.env_proxy_settings.return_value = proxy_envvars
             c.retrofit('aKeystone')
             self.NamedTemporaryFile.assert_has_calls([
                 mock.call(delete=False,
@@ -100,7 +108,8 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
                 ['octavia-diskimage-retrofit', '-u', 'pocket', '-d',
                  self.NamedTemporaryFile().name,
                  self.NamedTemporaryFile().name],
-                stderr=subprocess.STDOUT, universal_newlines=True)
+                stderr=subprocess.STDOUT, universal_newlines=True,
+                env={**os.environ, **proxy_envvars})
             glance.images.create.assert_called_once_with(
                 container_format='bare',
                 disk_format='qcow2',
