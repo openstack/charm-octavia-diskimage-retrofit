@@ -115,8 +115,7 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
             # https://github.com/juju/charm-helpers/pull/248
             #
             # It is then up to octavia-diskimage-retrofit to make use of them
-            # or not. This fixes
-            # https://bugs.launchpad.net/charm-octavia-diskimage-retrofit/+bug/1843510
+            # or not. This fixes LP: #1843510.
             proxy_envvars = ch_core.hookenv.env_proxy_settings()
             ch_core.hookenv.log('proxy_envvars: {}'.format(proxy_envvars),
                                 level=ch_core.hookenv.DEBUG)

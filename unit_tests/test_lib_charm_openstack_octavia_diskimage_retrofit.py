@@ -42,7 +42,13 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
             project='services',
             domain='service_domain')
 
-    def test_retrofit(self):
+    @mock.patch('os.environ.copy')
+    def test_retrofit(self, os_environ_mock):
+        os_environ_mock.return_value = {
+            'LANG': 'en_US.UTF-8',
+            'USER': 'someone',
+        }
+
         self.patch_object(octavia_diskimage_retrofit, 'glance_retrofitter')
         glance = mock.MagicMock()
         self.glance_retrofitter.get_glance_client.return_value = glance
@@ -109,7 +115,7 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
                  self.NamedTemporaryFile().name,
                  self.NamedTemporaryFile().name],
                 stderr=subprocess.STDOUT, universal_newlines=True,
-                env={**os.environ, **proxy_envvars})
+                env={**os_environ_mock(), **proxy_envvars})
             glance.images.create.assert_called_once_with(
                 container_format='bare',
                 disk_format='qcow2',
