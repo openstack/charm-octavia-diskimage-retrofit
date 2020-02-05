@@ -5,7 +5,6 @@ gate_bundles:
 - bionic-train
 - bionic-stein
 - bionic-rocky
-- disco
 dev_bundles:
 - eoan
 target_deploy_status:
