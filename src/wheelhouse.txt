@@ -1,2 +1,11 @@
-
 git+https://opendev.org/openstack/charms.openstack.git@stable/20.02#egg=charms.openstack
+keystoneauth1
+python-glanceclient
+# python-zipp 2.x introduces a requirement for setuptools 42.x which is not available.
+# resolve conflict:
+# layer-basic requires setuptools<42, zipp>=2.0.0 requires setuptools>42
+# LP: #1862186
+zipp < 2.0.0
+# Pin setuptools as tactical fix for LP: 1855766. Can be removed when
+# https://github.com/juju-solutions/layer-basic/issues/149 is fixed
+setuptools < 42.0.0
