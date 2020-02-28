@@ -15,6 +15,7 @@
 
 import os
 import sys
+import traceback
 
 # Load basic layer module from $CHARM_DIR/lib
 sys.path.append('lib')
@@ -65,8 +66,9 @@ def main(args):
                             level=ch_core.hookenv.DEBUG)
         action(args)
     except Exception as e:
-        ch_core.hookenv.log('action "{}" failed: "{}"'
-                            .format(action_name, str(e)),
+        ch_core.hookenv.log('action "{}" failed: "{}" "{}"'
+                            .format(action_name, str(e),
+                                    traceback.format_exc()),
                             level=ch_core.hookenv.ERROR)
         ch_core.hookenv.action_fail(str(e))
 
