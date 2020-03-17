@@ -1,11 +1,13 @@
 charm_name: octavia-diskimage-retrofit
 smoke_bundles:
-- bionic-train
+- bionic-ussuri
 gate_bundles:
+- bionic-ussuri
 - bionic-train
 - bionic-stein
 - bionic-rocky
 dev_bundles:
+- focal-ussuri
 - eoan
 target_deploy_status:
   glance-simplestreams-sync:
@@ -13,3 +15,6 @@ target_deploy_status:
     workload-status-message: Sync completed
 tests:
 - zaza.openstack.charm_tests.octavia.diskimage_retrofit.tests.OctaviaDiskimageRetrofitTest
+tests_options:
+  force_deploy:
+    - focal-ussuri

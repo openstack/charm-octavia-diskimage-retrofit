@@ -63,3 +63,6 @@ applications:
   octavia-diskimage-retrofit:
     series: bionic
     charm: ../../../octavia-diskimage-retrofit
+    options:
+      retrofit-series: bionic
+      retrofit-uca-pocket: rocky

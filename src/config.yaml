@@ -1,10 +1,21 @@
 options:
+  retrofit-series:
+    type: string
+    default:
+    description: |
+      Ubuntu series (eg. 'bionic') to look for in Glance to use as base
+      for the retrofitting process.
+      .
+      Default is to use most recent LTS.
   retrofit-uca-pocket:
     type: string
-    default: 'rocky'
+    default:
     description: |
       Name of Ubuntu Cloud Archive pocket to add to the image being
       retrofitted.
+      .
+      Default is 'ussuri' if ``retrofit-series`` is 'bionic', for other
+      releases no UCA pocket will be added unless specified.
   amp-image-tag:
     type: string
     default: ''

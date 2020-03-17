@@ -1,4 +1,4 @@
-# Copyright 2019 Canonical Ltd
+# opyright 2019 Canonical Ltd
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -96,13 +96,13 @@ class TestGlanceRetrofitter(test_utils.PatchHelper):
         self.get_product_name.return_value = 'aProduct'
         self.find_image.side_effect = [None, None, None, 'aImage']
         self.assertEquals(
-            glance_retrofitter.find_source_image('aGlance'),
+            glance_retrofitter.find_source_image('aGlance', '42.04'),
             'aImage')
         self.get_product_name.assert_has_calls([
-            mock.call(stream='daily', variant='server'),
-            mock.call(stream='daily', variant='minimal'),
-            mock.call(stream='released', variant='server'),
-            mock.call(stream='released', variant='minimal'),
+            mock.call(stream='daily', variant='server', release='42.04'),
+            mock.call(stream='daily', variant='minimal', release='42.04'),
+            mock.call(stream='released', variant='server', release='42.04'),
+            mock.call(stream='released', variant='minimal', release='42.04'),
         ])
         self.find_image.assert_called_with(
             'aGlance', filters={'product_name': 'aProduct'})

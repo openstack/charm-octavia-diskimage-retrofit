@@ -64,4 +64,5 @@ applications:
     series: bionic
     charm: ../../../octavia-diskimage-retrofit
     options:
+      retrofit-series: bionic
       retrofit-uca-pocket: stein

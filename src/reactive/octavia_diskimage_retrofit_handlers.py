@@ -20,8 +20,11 @@ import charms_openstack.charm as charm
 charms_openstack.bus.discover()
 
 charm.use_defaults(
+    'charm.installed',
     'config.changed',
-    'update-status')
+    'update-status',
+    'upgrade-charm',
+)
 
 
 @reactive.when_not('charm.installed')

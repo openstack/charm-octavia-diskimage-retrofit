@@ -23,8 +23,11 @@ class TestRegisteredHooks(test_utils.TestRegisteredHooks):
 
     def test_hooks(self):
         defaults = [
+            'charm.installed',
             'config.changed',
-            'update-status']
+            'update-status',
+            'upgrade-charm',
+        ]
         hook_set = {
             'when': {
                 'request_credentials': (

@@ -39,12 +39,33 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
     release = 'rocky'
     name = 'octavia-diskimage-retrofit'
     python_version = 3
+    packages = ['distro-info']
     adapters_class = charms_openstack.adapters.OpenStackRelationAdapters
     required_relations = ['juju-info', 'identity-credentials']
 
     @property
     def application_version(self):
         return charms_openstack.charm.core.get_snap_version(self.name)
+
+    def get_ubuntu_release(self, series=None):
+        """Determine Ubuntu release.
+
+        Use the ``distro-info`` script to determine the release number for
+        the most recent LTS release or the series provided as argument.
+
+        :param series: Ubuntu codename to look up
+        :type series: Optional[str]
+        :returns: Ubuntu release number eg. 18.04
+        :rtype: str
+        """
+        cmd = ['distro-info', '-r']
+        if series:
+            cmd.extend(['--series', series])
+        else:
+            cmd.append('--lts')
+
+        output = subprocess.check_output(cmd, universal_newlines=True)
+        return output.split()[0]
 
     def request_credentials(self, keystone_endpoint):
         keystone_endpoint.request_credentials(
@@ -69,10 +90,15 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
             keystone_endpoint)
         glance = glance_retrofitter.get_glance_client(session)
 
+        ubuntu_release = self.get_ubuntu_release(
+            series=self.config['retrofit-series'])
+
         if image_id:
             source_image = next(glance.images.list(filters={'id': image_id}))
         else:
-            source_image = glance_retrofitter.find_source_image(glance)
+            source_image = glance_retrofitter.find_source_image(
+                glance,
+                release=ubuntu_release)
         if not source_image:
             raise SourceImageNotFound('unable to find suitable source image')
 
@@ -101,9 +127,14 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
         ch_core.hookenv.status_set('maintenance',
                                    'Retrofitting {}'
                                    .format(source_image.name))
-        cmd = ['octavia-diskimage-retrofit',
-               '-u', ch_core.hookenv.config('retrofit-uca-pocket')]
-        if ch_core.hookenv.config('debug'):
+        cmd = ['octavia-diskimage-retrofit']
+        if self.config['retrofit-uca-pocket']:
+            cmd.extend(['-u', self.config['retrofit-uca-pocket']])
+        elif ubuntu_release == '18.04':
+            # Conditional default depending on ubuntu release used for amphora
+            cmd.extend(['-u', 'ussuri'])
+
+        if self.config['debug']:
             cmd.append('-d')
         cmd.extend([input_file.name, output_file.name])
         try:
@@ -147,7 +178,7 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
                                source_image.os_distro,
                                source_image.os_version,
                                source_image.version_name):
-                # build a informative image name
+            # build a informative image name
             dest_name += '-' + str(image_property)
         dest_image = glance.images.create(container_format='bare',
                                           disk_format='qcow2',
@@ -159,7 +190,7 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
             glance.images.upload(dest_image.id, fin)
 
         tags = [self.name]
-        custom_tag = ch_core.hookenv.config('amp-image-tag')
+        custom_tag = self.config['amp-image-tag']
         if custom_tag:
             tags.append(custom_tag)
         glance.images.update(

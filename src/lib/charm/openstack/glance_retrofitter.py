@@ -58,22 +58,25 @@ def get_glance_client(session):
     return glanceclient.Client('2', session=session)
 
 
-def get_product_name(stream='daily', variant='server', release='18.04',
-                     arch=''):
+def get_product_name(stream=None, variant=None, release=None, arch=None):
     """Build Simple Streams ``product_name`` string.
 
-    :param stream: Stream type. ('daily'|'released')
-    :type stream: str
-    :param variant: Image variant. ('server'|'minimal')
-    :type variant: str
-    :param release: Release verssion. (e.g. '18.04')
-    :type release: str
+    :param stream: Stream type. ('daily'|'released'), default 'daily'
+    :type stream: Optional[str]
+    :param variant: Image variant. ('server'|'minimal'), default 'server'
+    :type variant: Optional[str]
+    :param release: Release verssion, default '18.04
+    :type release: Optional[str]
     :param arch: Architecture string as Debian would expect it
                  (Optional: default behaviour is to query dpkg)
-    :type arch: str
+    :type arch: Optional[str]
     :returns: Simple Streams ``product_name``
     :rtype: str
     """
+    stream = stream or 'daily'
+    variant = variant or 'server'
+    release = release or '18.04'
+    arch = arch or ''
     if not arch:
         arch = subprocess.check_output(
             ['dpkg', '--print-architecture'],
@@ -97,8 +100,8 @@ def find_image(glance, filters):
     for image in glance.images.list(filters=filters,
                                     sort_key='created_at',
                                     sort_dir='desc'):
-            # glance does not offer ``version_name`` as a sort key.
-            # iterate over result to make sure we get the most recent image.
+        # glance does not offer ``version_name`` as a sort key.
+        # iterate over result to make sure we get the most recent image.
         if not candidate or candidate.version_name < image.version_name:
             candidate = image
     return candidate
@@ -118,7 +121,7 @@ def find_destination_image(glance, product_name, version_name):
                                        'source_version_name': version_name})
 
 
-def find_source_image(glance):
+def find_source_image(glance, release):
     """Find source image in Glance.
 
     Attempts to find a image from the ``daily`` stream first and reverts to
@@ -129,12 +132,15 @@ def find_source_image(glance):
     the standard image and its presence being more commonplace in deployed
     clouds.
 
+    :param release: Ubuntu release number to look for
+    :type release: str
     :returns: Glance image object or None
     :rtype: Option[..., None]
     """
     for stream in 'daily', 'released':
         for variant in 'server', 'minimal':
-            product = get_product_name(stream=stream, variant=variant)
+            product = get_product_name(stream=stream, variant=variant,
+                                       release=release)
             image = find_image(glance, filters={'product_name': product})
             if image:
                 break
