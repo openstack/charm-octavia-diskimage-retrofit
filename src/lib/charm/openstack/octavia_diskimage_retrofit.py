@@ -163,6 +163,15 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
 
         if self.config['debug']:
             cmd.append('-d')
+        if self.config['ubuntu-mirror']:
+            cmd.append('-m')
+            cmd.append(self.config['ubuntu-mirror'])
+        if self.config['uca-mirror']:
+            uca_mirror = self.config['uca-mirror']
+            if '|' in uca_mirror:
+                uca_mirror = uca_mirror.split('|')[0].strip()
+            cmd.append('-c')
+            cmd.append(uca_mirror)
         cmd.extend([input_file.name, output_file.name])
         try:
             # We want to pass the [juju-]{http,https,ftp,no}-proxy model

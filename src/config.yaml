@@ -1,4 +1,32 @@
 options:
+  ubuntu-mirror:
+    type: string
+    default: ''
+    description: |
+      Repository from which to retrieve ubuntu packages.
+  uca-mirror:
+    type: string
+    default: ''
+    description: |
+      Repository from which to install UCA packages. May be one of the
+      following: ppa:somecustom/ppa, a deb url sources entry, or a
+      supported Ubuntu Cloud Archive e.g.
+      .
+      cloud:<series>-<openstack-release>
+      cloud:<series>-<openstack-release>/updates
+      cloud:<series>-<openstack-release>/staging
+      cloud:<series>-<openstack-release>/proposed
+      .
+      See https://wiki.ubuntu.com/OpenStack/CloudArchive for info on which
+      cloud archives are available and supported.
+      .
+      NOTE: updating this setting to a source that is known to provide
+      a later version of OpenStack will trigger a software upgrade unless
+      action-managed-upgrade is set to True.
+      NOTE: a corresponding public key from keyserver.ubuntu.com can be used
+      when specifying a repository by appending the key separated by a | when
+      entering the deb url sources entry, i.e.
+      openstack-origin="deb <DEB URL>|<PUB KEY>"
   retrofit-series:
     type: string
     default:

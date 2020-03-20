@@ -113,6 +113,8 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
         self.patch_target('config')
         self.config.__getitem__ = lambda _, key: {
             'debug': True,
+            'ubuntu-mirror': '',
+            'uca-mirror': '',
             'retrofit-series': '',
             'retrofit-uca-pocket': 'pocket',
             'amp-image-tag': 'octavia-amphora',
