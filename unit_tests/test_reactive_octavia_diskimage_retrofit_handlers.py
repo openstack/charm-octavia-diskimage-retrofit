@@ -38,8 +38,6 @@ class TestRegisteredHooks(test_utils.TestRegisteredHooks):
                     'octavia-diskimage-retrofit.build',),
             },
             'when_not': {
-                'check_snap_installed': (
-                    'charm.installed',),
                 'request_credentials': (
                     'identity-credentials.available',),
             },
@@ -59,12 +57,6 @@ class TestOctaviaDiskimageRetrofitHandlers(test_utils.PatchHelper):
         self.provide_charm_instance().__enter__.return_value = \
             self.charm_instance
         self.provide_charm_instance().__exit__.return_value = None
-
-    def test_check_snap_installed(self):
-        self.patch_object(handlers.reactive, 'set_flag')
-        handlers.check_snap_installed()
-        self.charm_instance.assess_status.assert_called_once_with()
-        self.set_flag.assert_called_once_with('charm.installed')
 
     def test_request_credentials(self):
         self.patch_object(handlers.reactive, 'endpoint_from_flag')
