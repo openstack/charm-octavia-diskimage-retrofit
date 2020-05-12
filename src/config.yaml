@@ -6,7 +6,10 @@ options:
       Ubuntu series (eg. 'bionic') to look for in Glance to use as base
       for the retrofitting process.
       .
-      Default is to use most recent LTS.
+      Default is to use most recent LTS. If no value is configured and the
+      charm is not able to find the most recent LTS image in Glance it will
+      attempt to find a image matching the series of the unit the charm is run
+      on.
   retrofit-uca-pocket:
     type: string
     default:

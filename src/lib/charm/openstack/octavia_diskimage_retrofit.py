@@ -96,11 +96,27 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
         if image_id:
             source_image = next(glance.images.list(filters={'id': image_id}))
         else:
-            source_image = glance_retrofitter.find_source_image(
-                glance,
-                release=ubuntu_release)
-        if not source_image:
-            raise SourceImageNotFound('unable to find suitable source image')
+            source_image = None
+            if not self.config['retrofit-series']:
+                # When no specifc series is configured we fall back to looking
+                # for an image with series matching the series of the unit the
+                # charm runs on if most recent LTS image is not available
+                candidate_releases = (
+                    ubuntu_release,
+                    self.get_ubuntu_release(
+                        series=ch_core.host.get_distrib_codename()))
+            else:
+                candidate_releases = (ubuntu_release,)
+            for release in candidate_releases:
+                source_image = glance_retrofitter.find_source_image(
+                    glance,
+                    release=release)
+                if source_image:
+                    ubuntu_release = release
+                    break
+            else:
+                raise SourceImageNotFound(
+                    'unable to find suitable source image')
 
         if not image_id:
             for image in glance_retrofitter.find_destination_image(

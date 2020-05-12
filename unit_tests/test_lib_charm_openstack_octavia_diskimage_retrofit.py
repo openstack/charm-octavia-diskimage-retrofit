@@ -116,6 +116,9 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
         self.patch_target('get_ubuntu_release')
         self.get_ubuntu_release.side_effect = lambda series: (
             '20.04' if series == 'focal' else '18.04')
+        self.patch_object(octavia_diskimage_retrofit.ch_core.host,
+                          'get_distrib_codename')
+        self.get_distrib_codename.return_value = 'charm-unit-distro'
         with mock.patch('charm.openstack.octavia_diskimage_retrofit.open',
                         create=True) as mocked_open:
             self.glance_retrofitter.find_destination_image.return_value = \
@@ -126,6 +129,11 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
                 _fsi_mock = self.glance_retrofitter.find_source_image
                 _fsi_mock.assert_called_once_with(
                     mock.ANY, release='20.04')
+            self.get_ubuntu_release.assert_has_calls([
+                mock.call(series=''),
+                mock.call(series='charm-unit-distro'),
+            ])
+            self.get_ubuntu_release.reset_mock()
             self.config.__getitem__ = lambda _, key: {
                 'debug': True,
                 'retrofit-series': 'bionic',
@@ -137,11 +145,12 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
                 assert_called_once_with('aKeystone')
             self.glance_retrofitter.get_glance_client.assert_called_once_with(
                 self.glance_retrofitter.session_from_identity_credentials())
-
             self.glance_retrofitter.find_destination_image.return_value = \
                 []
             self.hookenv.env_proxy_settings.return_value = proxy_envvars
             self.target.retrofit('aKeystone')
+            self.get_ubuntu_release.assert_called_once_with(series='bionic')
+
             self.glance_retrofitter.find_source_image.assert_called_once_with(
                 mock.ANY, release='18.04')
             self.NamedTemporaryFile.assert_has_calls([

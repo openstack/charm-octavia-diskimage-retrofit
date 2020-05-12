@@ -34,6 +34,8 @@ applications:
     num_units: 1
     options:
       openstack-origin: cloud:bionic-ussuri/proposed
+  # NOTE(fnordahl): We deliberately do not include Focal here to confirm that
+  # the charm defaults work.
   glance-simplestreams-sync:
     charm: cs:~openstack-charmers-next/glance-simplestreams-sync
     num_units: 1
@@ -60,9 +62,8 @@ applications:
                'ftype~(disk1.img|disk.img)'
                ]
           }]"
+  # NOTE(fnordahl): We deliberately do not include retrofit-series and uca
+  # pocket configuration options here to confirm that the charm defaults work.
   octavia-diskimage-retrofit:
     series: bionic
     charm: ../../../octavia-diskimage-retrofit
-    options:
-      retrofit-series: bionic
-      retrofit-uca-pocket: ussuri-proposed
