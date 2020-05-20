@@ -20,6 +20,9 @@ comment: |
 repo: https://github.com/openstack/charm-octavia-diskimage-retrofit
 config:
   deletes:
-    - verbose
+    - ssl_ca
+    - ssl_cert
+    - ssl_key
     - use-internal-endpoints
     - use-syslog
+    - verbose
