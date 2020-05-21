@@ -8,3 +8,7 @@ zipp < 2.0.0
 # Pin setuptools as tactical fix for LP: 1855766. Can be removed when
 # https://github.com/juju-solutions/layer-basic/issues/149 is fixed
 setuptools < 42.0.0
+
+git+https://opendev.org/openstack/charms.openstack.git@stable/20.05#egg=charms.openstack
+
+git+https://github.com/juju/charm-helpers.git@stable/20.05#egg=charmhelpers
