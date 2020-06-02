@@ -11,8 +11,10 @@ dev_bundles:
 - eoan
 target_deploy_status:
   glance-simplestreams-sync:
-    workload-status: active
-    workload-status-message: Sync completed
+    workload-status: unknown
+    workload-status-message: ""
+configure:
+- zaza.openstack.charm_tests.glance_simplestreams_sync.setup.sync_images
 tests:
 - zaza.openstack.charm_tests.octavia.diskimage_retrofit.tests.OctaviaDiskimageRetrofitTest
 tests_options:
