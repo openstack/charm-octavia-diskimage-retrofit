@@ -8,6 +8,8 @@ gate_bundles:
 - bionic-stein
 - bionic-rocky
 dev_bundles:
+- groovy-victoria
+- focal-victoria
 - eoan
 target_deploy_status:
   glance-simplestreams-sync:
@@ -19,4 +21,4 @@ tests:
 - zaza.openstack.charm_tests.octavia.diskimage_retrofit.tests.OctaviaDiskimageRetrofitTest
 tests_options:
   force_deploy:
-    - focal-ussuri
+    - groovy-victoria
