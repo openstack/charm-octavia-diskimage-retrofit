@@ -47,15 +47,20 @@ def session_from_identity_credentials(identity_credentials):
     return session
 
 
-def get_glance_client(session):
+def get_glance_client(session, endpoint_type=None):
     """Get Glance Client from Keystone Session.
 
     :param session: Keystone Session object
     :type session: keystoneauth1.session.Session
+    :param endpoint_type: Type of endpoint the client should connect to
+    :type endpoint_type: Optional[str]
     :returns: Glance Client
     :rtype: glanceclient.Client
     """
-    return glanceclient.Client('2', session=session)
+    endpoint = session.auth.get_endpoint(
+        session, service_type='image', interface=endpoint_type or 'publicURL')
+    return glanceclient.Client(
+        '2', session=session, endpoint=endpoint)
 
 
 def get_product_name(stream=None, variant=None, release=None, arch=None):

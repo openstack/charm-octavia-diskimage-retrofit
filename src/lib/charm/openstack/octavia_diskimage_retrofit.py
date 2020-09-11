@@ -73,6 +73,16 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
             project='services',
             domain='service_domain')
 
+    def endpoint_type(self):
+        """Determine which endpoint type to use for OpenStack clients.
+
+        :returns: Endpoint type to use
+        :rtype: str
+        """
+        if self.options.use_internal_endpoints:
+            return 'internalURL'
+        return 'publicURL'
+
     def retrofit(self, keystone_endpoint, force=False, image_id=''):
         """Use ``octavia-diskimage-retrofit`` tool to retrofit an image.
 
@@ -88,7 +98,8 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
         """
         session = glance_retrofitter.session_from_identity_credentials(
             keystone_endpoint)
-        glance = glance_retrofitter.get_glance_client(session)
+        glance = glance_retrofitter.get_glance_client(
+            session, endpoint_type=self.endpoint_type())
 
         ubuntu_release = self.get_ubuntu_release(
             series=self.config['retrofit-series'])

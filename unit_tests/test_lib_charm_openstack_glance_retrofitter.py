@@ -48,9 +48,19 @@ class TestGlanceRetrofitter(test_utils.PatchHelper):
 
     def test_get_glance_client(self):
         self.patch_object(glance_retrofitter.glanceclient, 'Client')
-        result = glance_retrofitter.get_glance_client('aSession')
-        self.Client.assert_called_once_with('2', session='aSession')
+        session = mock.MagicMock()
+        result = glance_retrofitter.get_glance_client(
+            session, endpoint_type='aEndpointType')
+        session.auth.get_endpoint.assert_called_once_with(
+            session, service_type='image', interface='aEndpointType')
+        self.Client.assert_called_once_with(
+            '2', session=session, endpoint=session.auth.get_endpoint())
         self.assertEquals(result, self.Client())
+        session.reset_mock()
+        result = glance_retrofitter.get_glance_client(
+            session)
+        session.auth.get_endpoint.assert_called_once_with(
+            session, service_type='image', interface='publicURL')
 
     def test_get_product_name(self):
         self.patch_object(glance_retrofitter.subprocess, 'check_output')

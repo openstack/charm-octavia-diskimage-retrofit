@@ -27,6 +27,10 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
         super().setUp()
         self.patch_release(
             octavia_diskimage_retrofit.OctaviaDiskimageRetrofitCharm.release)
+        self.patch_object(octavia_diskimage_retrofit.ch_core.hookenv, 'config')
+        self.config.side_effect = lambda: {
+            'use-internal-endpoints': False,
+        }
         self.target = (
             octavia_diskimage_retrofit.OctaviaDiskimageRetrofitCharm())
 
@@ -144,7 +148,8 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
             self.glance_retrofitter.session_from_identity_credentials.\
                 assert_called_once_with('aKeystone')
             self.glance_retrofitter.get_glance_client.assert_called_once_with(
-                self.glance_retrofitter.session_from_identity_credentials())
+                self.glance_retrofitter.session_from_identity_credentials(),
+                endpoint_type='publicURL')
             self.glance_retrofitter.find_destination_image.return_value = \
                 []
             self.hookenv.env_proxy_settings.return_value = proxy_envvars
