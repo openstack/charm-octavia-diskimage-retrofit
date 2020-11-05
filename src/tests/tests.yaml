@@ -2,6 +2,7 @@ charm_name: octavia-diskimage-retrofit
 smoke_bundles:
 - bionic-ussuri
 gate_bundles:
+- groovy-victoria
 - focal-victoria
 - focal-ussuri
 - bionic-ussuri
@@ -9,7 +10,6 @@ gate_bundles:
 - bionic-stein
 - bionic-rocky
 dev_bundles:
-- groovy-victoria
 - eoan
 target_deploy_status:
   glance-simplestreams-sync:
