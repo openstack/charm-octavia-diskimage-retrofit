@@ -9,8 +9,6 @@ gate_bundles:
 - bionic-train
 - bionic-stein
 - bionic-rocky
-dev_bundles:
-- eoan
 target_deploy_status:
   glance-simplestreams-sync:
     workload-status: unknown
