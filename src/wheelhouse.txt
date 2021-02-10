@@ -9,6 +9,6 @@ zipp < 2.0.0
 # https://github.com/juju-solutions/layer-basic/issues/149 is fixed
 setuptools < 42.0.0
 
-git+https://opendev.org/openstack/charms.openstack.git#egg=charms.openstack
+git+https://opendev.org/openstack/charms.openstack.git@stable/21.01#egg=charms.openstack
 
-git+https://github.com/juju/charm-helpers.git#egg=charmhelpers
+git+https://github.com/juju/charm-helpers.git@stable/21.01#egg=charmhelpers
