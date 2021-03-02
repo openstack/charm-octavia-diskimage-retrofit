@@ -9,6 +9,7 @@ series:
 - bionic
 - focal
 - groovy
+- hirsute
 subordinate: true
 requires:
   juju-info:
