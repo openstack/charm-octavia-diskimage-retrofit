@@ -10,6 +10,7 @@ series:
 - focal
 - groovy
 - hirsute
+- impish
 subordinate: true
 requires:
   juju-info:
