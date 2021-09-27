@@ -4,7 +4,14 @@
     check:
       jobs:
       - charm-build
-      - groovy-victoria
+      - impish-xena:
+          voting: false
+      - hirsute-wallaby:
+          voting: false
+      - focal-xena:
+          voting: false
+      - focal-wallaby:
+          voting: false
       - focal-victoria
       - focal-ussuri
       - bionic-ussuri

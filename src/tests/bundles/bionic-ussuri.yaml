@@ -40,21 +40,34 @@ applications:
            path: 'streams/v1/index.sjson',
            max: 1,
            item_filters: [
-               'release~(xenial|bionic|eoan)',
-               'arch~(x86_64|amd64)',
-               'ftype~(disk1.img|disk.img)'
-               ]
-          },
-          {url: 'http://cloud-images.ubuntu.com/minimal/daily/',
-           name_prefix: 'ubuntu:released',
-           path: 'streams/v1/index.sjson',
-           max: 1,
-           item_filters: [
-               'release~(xenial|bionic|eoan)',
+               'release~(xenial|bionic|focal)',
                'arch~(x86_64|amd64)',
                'ftype~(disk1.img|disk.img)'
                ]
           }]"
+      # NOTE(coreycb): Drop minimal mirror until https://pad.lv/1933966
+      #                is fixed.
+      #
+      # mirror_list: "[{url: 'http://cloud-images.ubuntu.com/daily/',
+      #      name_prefix: 'ubuntu:released',
+      #      path: 'streams/v1/index.sjson',
+      #      max: 1,
+      #      item_filters: [
+      #          'release~(xenial|bionic|focal)',
+      #          'arch~(x86_64|amd64)',
+      #          'ftype~(disk1.img|disk.img)'
+      #          ]
+      #     },
+      #     {url: 'http://cloud-images.ubuntu.com/minimal/daily/',
+      #      name_prefix: 'ubuntu:released',
+      #      path: 'streams/v1/index.sjson',
+      #      max: 1,
+      #      item_filters: [
+      #          'release~(xenial|bionic|focal)',
+      #          'arch~(x86_64|amd64)',
+      #          'ftype~(disk1.img|disk.img)'
+      #          ]
+      #     }]"
   # NOTE(fnordahl): We deliberately do not include retrofit-series and uca
   # pocket configuration options here to confirm that the charm defaults work.
   octavia-diskimage-retrofit:

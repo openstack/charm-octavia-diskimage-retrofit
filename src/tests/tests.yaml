@@ -1,23 +1,33 @@
 charm_name: octavia-diskimage-retrofit
+
 smoke_bundles:
 - bionic-ussuri
+
 gate_bundles:
-- groovy-victoria
 - focal-victoria
 - focal-ussuri
 - bionic-ussuri
 - bionic-train
 - bionic-stein
+
 dev_bundles:
 - bionic-rocky
+- focal-wallaby
+- focal-xena
+- hirsute-wallaby
+- impish-xena
+
 target_deploy_status:
   glance-simplestreams-sync:
     workload-status: unknown
     workload-status-message: ""
+
 configure:
 - zaza.openstack.charm_tests.glance_simplestreams_sync.setup.sync_images
+
 tests:
 - zaza.openstack.charm_tests.octavia.diskimage_retrofit.tests.OctaviaDiskimageRetrofitTest
+
 tests_options:
   force_deploy:
-    - groovy-victoria
+    - impish-xena
