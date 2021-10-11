@@ -14,21 +14,24 @@ relations:
   - octavia-diskimage-retrofit:identity-credentials
 applications:
   keystone:
-    charm: cs:~openstack-charmers-next/keystone
+    charm: cs:~openstack-charmers/keystone
     num_units: 1
     options:
       openstack-origin: cloud:bionic-rocky
+    channel: candidate
   mysql:
     constraints: mem=3072M
-    charm: cs:~openstack-charmers-next/percona-cluster
+    charm: cs:~openstack-charmers/percona-cluster
     num_units: 1
+    channel: candidate
   glance:
-    charm: cs:~openstack-charmers-next/glance
+    charm: cs:~openstack-charmers/glance
     num_units: 1
     options:
       openstack-origin: cloud:bionic-rocky
+    channel: candidate
   glance-simplestreams-sync:
-    charm: cs:~openstack-charmers-next/glance-simplestreams-sync
+    charm: cs:~openstack-charmers/glance-simplestreams-sync
     num_units: 1
     options:
       source: ppa:simplestreams-dev/trunk
@@ -66,6 +69,7 @@ applications:
       #          'ftype~(disk1.img|disk.img)'
       #          ]
       #     }]"
+    channel: candidate
   octavia-diskimage-retrofit:
     series: bionic
     charm: ../../../octavia-diskimage-retrofit

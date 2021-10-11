@@ -20,7 +20,7 @@ applications:
 
   mysql-innodb-cluster:
     constraints: mem=3072M
-    charm: cs:~openstack-charmers-next/mysql-innodb-cluster
+    charm: cs:~openstack-charmers/mysql-innodb-cluster
     num_units: 3
     options:
       source: *openstack-origin
@@ -28,30 +28,35 @@ applications:
       - '0'
       - '1'
       - '2'
+    channel: candidate
 
   keystone-mysql-router:
-    charm: cs:~openstack-charmers-next/mysql-router
+    charm: cs:~openstack-charmers/mysql-router
+    channel: candidate
   glance-mysql-router:
-    charm: cs:~openstack-charmers-next/mysql-router
+    charm: cs:~openstack-charmers/mysql-router
+    channel: candidate
 
   keystone:
-    charm: cs:~openstack-charmers-next/keystone
+    charm: cs:~openstack-charmers/keystone
     num_units: 1
     options:
       openstack-origin: *openstack-origin
     to:
       - '3'
+    channel: candidate
 
   glance:
-    charm: cs:~openstack-charmers-next/glance
+    charm: cs:~openstack-charmers/glance
     num_units: 1
     options:
       openstack-origin: *openstack-origin
     to:
       - '4'
+    channel: candidate
 
   glance-simplestreams-sync:
-    charm: cs:~openstack-charmers-next/glance-simplestreams-sync
+    charm: cs:~openstack-charmers/glance-simplestreams-sync
     num_units: 1
     options:
       source: ppa:simplestreams-dev/trunk
@@ -91,6 +96,7 @@ applications:
       #     }]"
     to:
       - '5'
+    channel: candidate
 
   octavia-diskimage-retrofit:
     charm: ../../../octavia-diskimage-retrofit
