@@ -84,7 +84,7 @@
       "type": "python_module",
       "package": "keystoneauth1",
       "vcs": null,
-      "version": "4.4.0"
+      "version": "4.1.0"
     },
     {
       "type": "python_module",
@@ -96,7 +96,7 @@
       "type": "python_module",
       "package": "debtcollector",
       "vcs": null,
-      "version": "2.3.0"
+      "version": "1.21.0"
     },
     {
       "type": "python_module",
@@ -108,7 +108,7 @@
       "type": "python_module",
       "package": "packaging",
       "vcs": null,
-      "version": "21.0"
+      "version": "20.9"
     },
     {
       "type": "python_module",
@@ -132,13 +132,13 @@
       "type": "python_module",
       "package": "pyrsistent",
       "vcs": null,
-      "version": "0.18.0"
+      "version": "0.17.3"
     },
     {
       "type": "python_module",
       "package": "stevedore",
       "vcs": null,
-      "version": "3.4.0"
+      "version": "1.30.1"
     },
     {
       "type": "python_module",
@@ -198,13 +198,13 @@
       "type": "python_module",
       "package": "python-glanceclient",
       "vcs": null,
-      "version": "3.5.0"
+      "version": "2.16.0"
     },
     {
       "type": "python_module",
       "package": "requests",
       "vcs": null,
-      "version": "2.26.0"
+      "version": "2.25.1"
     },
     {
       "type": "python_module",
@@ -260,7 +260,7 @@
       "type": "python_module",
       "package": "idna",
       "vcs": null,
-      "version": "3.2"
+      "version": "2.10"
     },
     {
       "type": "python_module",
@@ -278,13 +278,13 @@
       "type": "python_module",
       "package": "oslo.i18n",
       "vcs": null,
-      "version": "5.1.0"
+      "version": "3.23.1"
     },
     {
       "type": "python_module",
       "package": "cryptography",
       "vcs": null,
-      "version": "35.0.0"
+      "version": "2.3.1"
     },
     {
       "type": "python_module",
@@ -322,7 +322,7 @@
       "type": "python_module",
       "package": "prettytable",
       "vcs": null,
-      "version": "2.2.1"
+      "version": "0.7.2"
     },
     {
       "type": "python_module",
@@ -352,7 +352,7 @@
       "type": "python_module",
       "package": "pyOpenSSL",
       "vcs": null,
-      "version": "21.0.0"
+      "version": "19.0.0"
     },
     {
       "type": "python_module",
@@ -370,7 +370,7 @@
       "type": "python_module",
       "package": "oslo.utils",
       "vcs": null,
-      "version": "4.10.0"
+      "version": "3.41.0"
     },
     {
       "type": "python_module",
