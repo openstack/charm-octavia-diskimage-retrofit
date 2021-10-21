@@ -18,18 +18,15 @@ applications:
     num_units: 1
     options:
       openstack-origin: cloud:bionic-ussuri/proposed
-    channel: candidate
   mysql:
     constraints: mem=3072M
     charm: cs:~openstack-charmers/percona-cluster
     num_units: 1
-    channel: candidate
   glance:
     charm: cs:~openstack-charmers/glance
     num_units: 1
     options:
       openstack-origin: cloud:bionic-ussuri/proposed
-    channel: candidate
   # NOTE(fnordahl): We deliberately do not include Focal here to confirm that
   # the charm defaults work.
   glance-simplestreams-sync:
@@ -71,7 +68,6 @@ applications:
       #          'ftype~(disk1.img|disk.img)'
       #          ]
       #     }]"
-    channel: candidate
   # NOTE(fnordahl): We deliberately do not include retrofit-series and uca
   # pocket configuration options here to confirm that the charm defaults work.
   octavia-diskimage-retrofit:
