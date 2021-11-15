@@ -4,19 +4,20 @@
     check:
       jobs:
       - charm-build
+      - bionic-stein
+      - bionic-train
+      - bionic-ussuri
+      - focal-ussuri
+      - focal-victoria
+      - focal-wallaby
+      - focal-xena
+      - focal-yoga:
+          voting: false
+      - hirsute-wallaby
       - impish-xena:
           voting: false
-      - hirsute-wallaby:
+      - jammy-yoga:
           voting: false
-      - focal-xena:
-          voting: false
-      - focal-wallaby:
-          voting: false
-      - focal-victoria
-      - focal-ussuri
-      - bionic-ussuri
-      - bionic-train
-      - bionic-stein
     vars:
       needs_charm_build: true
       charm_build_name: octavia-diskimage-retrofit
