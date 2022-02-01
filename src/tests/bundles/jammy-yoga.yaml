@@ -1,6 +1,8 @@
 variables:
   openstack-origin: &openstack-origin distro
 
+local_overlay_enabled: False
+
 series: jammy
 
 comment:
@@ -28,14 +30,14 @@ applications:
       - '0'
       - '1'
       - '2'
-    channel: latest/edge
+    channel: stable/yoga
 
   keystone-mysql-router:
     charm: ch:mysql-router
-    channel: latest/edge
+    channel: stable/yoga
   glance-mysql-router:
     charm: ch:mysql-router
-    channel: latest/edge
+    channel: stable/yoga
 
   keystone:
     charm: ch:keystone
@@ -44,7 +46,7 @@ applications:
       openstack-origin: *openstack-origin
     to:
       - '3'
-    channel: latest/edge
+    channel: stable/yoga
 
   glance:
     charm: ch:glance
@@ -53,7 +55,7 @@ applications:
       openstack-origin: *openstack-origin
     to:
       - '4'
-    channel: latest/edge
+    channel: stable/yoga
 
   glance-simplestreams-sync:
     charm: ch:glance-simplestreams-sync
@@ -96,10 +98,10 @@ applications:
       #     }]"
     to:
       - '5'
-    channel: latest/edge
+    channel: stable/yoga
 
   octavia-diskimage-retrofit:
-    charm: ../../../octavia-diskimage-retrofit
+    charm: ../../../octavia-diskimage-retrofit.charm
     options:
       retrofit-series: focal
 

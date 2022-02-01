@@ -1,6 +1,9 @@
 keystoneauth1
 python-glanceclient
+poetry-core
 
+# Pin pyrsistent<0.18.0 as later versions require setuptools >= 42.0.0
+pyrsistent<0.18.0
 # python-zipp 2.x introduces a requirement for setuptools 42.x which is not available.
 # resolve conflict:
 # layer-basic requires setuptools<42, zipp>=2.0.0 requires setuptools>42
@@ -9,7 +12,6 @@ zipp < 2.0.0
 # Pin setuptools as tactical fix for LP: 1855766. Can be removed when
 # https://github.com/juju-solutions/layer-basic/issues/149 is fixed
 setuptools < 42.0.0
-
 # cryptography 3.4 introduces a requirement for rust code in the module.  As it has to be compiled
 # on the machine during install, this breaks installs.  Instead pin to <3.4 until a solution can be
 # found that doesn't require compiling on the target machine.

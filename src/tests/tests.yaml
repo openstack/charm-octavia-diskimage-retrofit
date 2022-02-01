@@ -14,7 +14,7 @@ dev_bundles:
 target_deploy_status:
   glance-simplestreams-sync:
     workload-status: unknown
-    workload-status-message: ""
+    workload-status-message-prefix: ""
 
 configure:
 - zaza.openstack.charm_tests.glance_simplestreams_sync.setup.sync_images

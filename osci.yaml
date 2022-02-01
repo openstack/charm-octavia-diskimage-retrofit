@@ -7,3 +7,4 @@
     vars:
       needs_charm_build: true
       charm_build_name: octavia-diskimage-retrofit
+      build_type: charmcraft
