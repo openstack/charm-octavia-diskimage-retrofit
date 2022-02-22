@@ -15,6 +15,7 @@
 from unittest import mock
 import os
 import subprocess
+import time
 
 import charms_openstack.test_utils as test_utils
 
@@ -74,7 +75,100 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
             ['distro-info', '-r', '--series', 'focal'],
             universal_newlines=True)
 
+    def test_handle_auto_retrofit(self):
+        current_link = ('/etc/cron.weekly/' + octavia_diskimage_retrofit
+                        .CRON_JOB_LINKNAME)
+        previous_link = ('/etc/cron.hourly/' + octavia_diskimage_retrofit
+                         .CRON_JOB_LINKNAME)
+        installed_script = os.path.join("files", octavia_diskimage_retrofit
+                                        .SCRIPT_WRAPPER_NAME)
+        self.patch_object(
+            octavia_diskimage_retrofit.os, 'symlink')
+        self.patch_object(
+            octavia_diskimage_retrofit.os.path, 'abspath')
+        self.abspath.return_value = installed_script
+        self.patch_target('config')
+        self.config.__getitem__ = lambda _, key: {
+            'auto-retrofit': True,
+            'frequency': 'weekly',
+        }.get(key)
+        self.config.previous.return_value = 'hourly'
+        self.patch_target('remove_cron_job')
+        self.patch_object(octavia_diskimage_retrofit.ch_core.hookenv,
+                          'is_leader')
+        self.patch_target('render_shell_wrapper')
+        self.is_leader.return_value = True
+        self.target.handle_auto_retrofit()
+        self.is_leader.assert_called_once()
+        self.target.remove_cron_job.assert_has_calls([
+            mock.call(previous_link),
+            mock.call(current_link)],
+            any_order=False)
+        self.target.render_shell_wrapper.assert_called_once()
+        self.symlink.assert_called_once_with(installed_script, current_link)
+        os_error = OSError()
+        os_error.errno = octavia_diskimage_retrofit.ERR_FILE_EXISTS
+        self.symlink.reset_mock()
+        self.symlink.side_effect = os_error
+        self.patch_object(octavia_diskimage_retrofit.ch_core.hookenv,
+                          'log')
+        self.target.handle_auto_retrofit()
+        self.assertEquals(self.log.call_args[0][0],
+                          'symlink "' + current_link + '" already exists')
+        self.symlink.reset_mock()
+        self.is_leader.return_value = False
+        self.target.handle_auto_retrofit()
+        self.symlink.assert_not_called()
+
+    def test_remove_cron_job(self):
+        fake_link = 'fake_link'
+        self.patch_object(
+            octavia_diskimage_retrofit.os, 'unlink')
+        self.target.remove_cron_job(fake_link)
+        self.unlink.assert_called_once_with(fake_link)
+        os_error = OSError()
+        os_error.errno = octavia_diskimage_retrofit.ERR_FILE_NOT_EXISTS
+        self.unlink.reset_mock()
+        self.unlink.side_effect = os_error
+        self.patch_object(octavia_diskimage_retrofit.ch_core.hookenv, 'log')
+        self.target.remove_cron_job(fake_link)
+        self.assertEquals(self.log.call_args[0][0],
+                          'symlink "' + fake_link + '" does not exist')
+
+    def test_render_shell_wrapper(self):
+        unit_name = 'octavia-diskimage-retrofit/0'
+        self.patch_object(
+            octavia_diskimage_retrofit.os.path, 'exists')
+        self.exists.return_value = False
+        self.patch_object(octavia_diskimage_retrofit.ch_core.hookenv,
+                          'local_unit')
+        self.patch_object(octavia_diskimage_retrofit.ch_core,
+                          'templating')
+        self.local_unit.return_value = unit_name
+        target = os.path.join("files",
+                              octavia_diskimage_retrofit.SCRIPT_WRAPPER_NAME)
+        render_params = {
+            'source': octavia_diskimage_retrofit.SCRIPT_WRAPPER_TEMPLATE_NAME,
+            'target': target,
+            'perms': 0o755,
+            'context': {
+                'unit_name': unit_name
+            },
+            'templates_dir': 'files'
+        }
+        self.target.render_shell_wrapper()
+        self.local_unit.assert_called_once()
+        self.templating.render.assert_called_once_with(**render_params)
+        self.exists.reset_mock()
+        self.exists.return_value = True
+        self.local_unit.reset_mock()
+        self.templating.render.reset_mock()
+        self.target.render_shell_wrapper()
+        self.local_unit.assert_not_called()
+        self.templating.render.assert_not_called()
+
     def test_retrofit(self):
+        timestamp = '03/07/22 15:54:22'
         self.patch_object(octavia_diskimage_retrofit, 'glance_retrofitter')
         glance = mock.MagicMock()
         self.glance_retrofitter.get_glance_client.return_value = glance
@@ -155,6 +249,9 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
             self.glance_retrofitter.find_destination_image.return_value = \
                 []
             self.hookenv.env_proxy_settings.return_value = proxy_envvars
+            self.patch_target('db')
+            self.patch_object(time, 'strftime')
+            self.strftime.return_value = timestamp
             self.target.retrofit('aKeystone')
             self.get_ubuntu_release.assert_called_once_with(series='bionic')
 
@@ -193,3 +290,11 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
                 source_product_name='aProductName',
                 source_version_name='aVersionName',
                 tags=['octavia-diskimage-retrofit', 'octavia-amphora'])
+            self.strftime.assert_called_once()
+            self.db.set.assert_has_calls([
+                mock.call(octavia_diskimage_retrofit.KEY_LAST_RUN_IMAGE_ID,
+                          'aId'),
+                mock.call(octavia_diskimage_retrofit.KEY_LAST_RUN_TIME,
+                          timestamp)
+            ])
+            self.db.flush.assert_called_once()

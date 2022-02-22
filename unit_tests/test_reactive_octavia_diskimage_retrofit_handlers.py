@@ -37,6 +37,11 @@ class TestRegisteredHooks(test_utils.TestRegisteredHooks):
                 'build': (
                     'octavia-diskimage-retrofit.build',),
             },
+            'when_any': {
+                'retrofit_by_cron': (
+                    'config.changed.auto-retrofit',
+                    'config.changed.frequency',),
+            },
             'when_not': {
                 'request_credentials': (
                     'identity-credentials.available',),

@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Copyright 2022 Canonical Ltd
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+set_context () {
+  if [ -z "$HOME" ]; then
+      export HOME=/root
+  fi
+
+  if [ -f /etc/profile.d/juju-proxy.sh ]; then
+      source /etc/profile.d/juju-proxy.sh
+  elif [ -f /etc/juju-proxy.conf ]; then
+      source /etc/juju-proxy.conf
+  elif [ -f /home/ubuntu/.juju-proxy ]; then
+      source /home/ubuntu/.juju-proxy
+  fi
+
+  readonly script_file="./files/retrofit-image.py"
+  readonly SCRIPT_COMMAND="/usr/bin/juju-run -u {{ unit_name }} -- $script_file"
+}
+
+retrofit () {
+    logger -p syslog.info "Starting image retrofitting process."
+    if $SCRIPT_COMMAND; then
+        logger -p syslog.info "Image retrofitting process completed successfully."
+    else
+        logger -p syslog.info "Image retrofitting process failed. Return code: $?"
+    fi
+}
+
+main () {
+    set -euo pipefail
+    set_context
+    retrofit
+}
+
+main

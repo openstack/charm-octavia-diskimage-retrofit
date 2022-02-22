@@ -41,3 +41,10 @@ def request_credentials():
 def credentials_available():
     with charm.provide_charm_instance() as instance:
         instance.assess_status()
+
+
+@reactive.when_any('config.changed.auto-retrofit',
+                   'config.changed.frequency')
+def retrofit_by_cron():
+    with charm.provide_charm_instance() as instance:
+        instance.handle_auto_retrofit()

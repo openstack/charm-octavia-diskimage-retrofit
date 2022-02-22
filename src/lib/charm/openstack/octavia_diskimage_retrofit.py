@@ -15,16 +15,23 @@
 import os
 import subprocess
 import tempfile
+import time
 
 import charms_openstack.adapters
 import charms_openstack.charm
 import charms_openstack.charm.core
 
 import charmhelpers.core as ch_core
+import charmhelpers.core.unitdata as unitdata
 
 import charm.openstack.glance_retrofitter as glance_retrofitter
 
 TMPDIR = '/var/snap/octavia-diskimage-retrofit/common/tmp'
+SCRIPT_WRAPPER_NAME = "auto-retrofit.sh"
+SCRIPT_WRAPPER_TEMPLATE_NAME = "auto-retrofit.tmpl"
+CRON_JOB_LINKNAME = 'auto-retrofit'
+ERR_FILE_EXISTS, ERR_FILE_NOT_EXISTS = 17, 2
+KEY_LAST_RUN_IMAGE_ID, KEY_LAST_RUN_TIME = 'last-image-id', 'last-timestamp'
 
 
 class SourceImageNotFound(Exception):
@@ -42,6 +49,7 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
     packages = ['distro-info']
     adapters_class = charms_openstack.adapters.OpenStackRelationAdapters
     required_relations = ['juju-info', 'identity-credentials']
+    db = unitdata.kv()
 
     @property
     def application_version(self):
@@ -82,6 +90,79 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
         if self.options.use_internal_endpoints:
             return 'internalURL'
         return 'publicURL'
+
+    def handle_auto_retrofit(self):
+        """Setup or clear cron job for auto-retrofitting
+
+        Depending on the current values of ``auto-retrofit`` and ``frequency``
+        config options, the cron job with the specified frequency will be
+        added or removed.
+
+        :raises:OSError
+        """
+        target_script = os.path.join("files", SCRIPT_WRAPPER_NAME)
+
+        # By default remove links for current and previous frequency values
+        # on all units.
+        # The second one is current
+        previous_linkname = self.config.previous('frequency')
+        currnet_linkname = self.config['frequency']
+        for freq in [previous_linkname, currnet_linkname]:
+            if freq:
+                linkname = '/etc/cron.{}/{}'.format(
+                    freq,
+                    CRON_JOB_LINKNAME)
+                self.remove_cron_job(linkname)
+
+        # Setup cron job only on the leader
+        if self.config['auto-retrofit'] and ch_core.hookenv.is_leader():
+            try:
+                self.render_shell_wrapper()
+                ch_core.hookenv.log('Creating symlink: "{}" -> "{}"'
+                                    .format(target_script, linkname))
+                os.symlink(os.path.abspath(target_script), linkname)
+            except OSError as ex:
+                if ex.errno == ERR_FILE_EXISTS:
+                    ch_core.hookenv.log('symlink "{}" already exists'
+                                        .format(linkname),
+                                        level=ch_core.hookenv.INFO)
+                else:
+                    raise ex
+
+    def remove_cron_job(self, linkname):
+        """Remove existing cron job for auto retrofitting
+
+        :param linkname: cron job symbolic link to be removed
+        :type linkname: str
+        :raises:OSError
+        """
+        try:
+            ch_core.hookenv.log('Removing symlink: "{}"'
+                                .format(linkname))
+            os.unlink(linkname)
+        except OSError as ex:
+            if ex.errno == ERR_FILE_NOT_EXISTS:
+                ch_core.hookenv.log('symlink "{}" does not exist'
+                                    .format(linkname),
+                                    level=ch_core.hookenv.INFO)
+            else:
+                raise ex
+
+    def render_shell_wrapper(self):
+        """Render shell script that will be run by cron
+        """
+        target_script = os.path.join("files", SCRIPT_WRAPPER_NAME)
+        if not os.path.exists(target_script):
+            unit_name = ch_core.hookenv.local_unit()
+            ch_core.templating.render(
+                source=SCRIPT_WRAPPER_TEMPLATE_NAME,
+                target=target_script,
+                perms=0o755,
+                context={
+                    'unit_name': unit_name,
+                },
+                templates_dir='files'
+            )
 
     def retrofit(self, keystone_endpoint, force=False, image_id=''):
         """Use ``octavia-diskimage-retrofit`` tool to retrofit an image.
@@ -234,6 +315,19 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
             source_product_name=source_image.product_name or 'custom',
             source_version_name=source_image.version_name or 'custom',
             tags=tags)
+        ts = time.strftime("%x %X")
+        self.db.set(KEY_LAST_RUN_IMAGE_ID, dest_image.id)
+        self.db.set(KEY_LAST_RUN_TIME, ts)
+        self.db.flush()
         ch_core.hookenv.log('Successfully created image "{}" with id "{}"'
                             .format(dest_image.name, dest_image.id),
                             level=ch_core.hookenv.INFO)
+
+    def custom_assess_status_last_check(self):
+        image_id = self.db.get(KEY_LAST_RUN_IMAGE_ID)
+        last_run_time = self.db.get(KEY_LAST_RUN_TIME)
+        if image_id and last_run_time:
+            return 'active', 'Unit is ready (Image {} retrofitting ' \
+                   'completed at {})'.format(image_id, last_run_time)
+        else:
+            return None, None

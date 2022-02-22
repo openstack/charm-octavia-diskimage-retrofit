@@ -56,3 +56,18 @@ options:
       Note that the charm will allways add the ``octavia-diskimage-retrofit``
       tag to created images, this is for convenience and may be used by the
       charm for housekeeping in the future.
+  auto-retrofit:
+    type: boolean
+    default: False
+    description: |
+      Enable cron-based retrofitting.
+      .
+      If True, cron job to automatically retrofit images according to the
+      ``frequency`` param, will be set on the leader unit.
+  frequency:
+    type: string
+    default: "daily"
+    description: |
+      Frequency of the auto retrofit cron job execution
+      .
+      It is one of ['hourly', 'daily', 'weekly']
