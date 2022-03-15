@@ -1,21 +1,13 @@
 charm_name: octavia-diskimage-retrofit
 
 smoke_bundles:
-- bionic-ussuri
+- focal-xena
 
 gate_bundles:
-- focal-victoria
-- focal-ussuri
-- bionic-ussuri
-- bionic-train
-- bionic-stein
-
-dev_bundles:
-- bionic-rocky
 - focal-wallaby
 - focal-xena
-- hirsute-wallaby
-- impish-xena
+
+dev_bundles:
 
 target_deploy_status:
   glance-simplestreams-sync:
@@ -29,5 +21,4 @@ tests:
 - zaza.openstack.charm_tests.octavia.diskimage_retrofit.tests.OctaviaDiskimageRetrofitTest
 
 tests_options:
-  force_deploy:
-    - impish-xena
+  force_deploy: []
