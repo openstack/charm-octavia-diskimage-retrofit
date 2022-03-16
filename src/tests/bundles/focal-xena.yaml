@@ -30,14 +30,14 @@ applications:
       - '0'
       - '1'
       - '2'
-    channel: stable/yoga
+    channel: 8.0.19/edge
 
   keystone-mysql-router:
     charm: ch:mysql-router
-    channel: stable/yoga
+    channel: 8.0.19/edge
   glance-mysql-router:
     charm: ch:mysql-router
-    channel: stable/yoga
+    channel: 8.0.19/edge
 
   keystone:
     charm: ch:keystone
@@ -46,7 +46,7 @@ applications:
       openstack-origin: *openstack-origin
     to:
       - '3'
-    channel: stable/yoga
+    channel: yoga/edge
 
   glance:
     charm: ch:glance
@@ -55,7 +55,7 @@ applications:
       openstack-origin: *openstack-origin
     to:
       - '4'
-    channel: stable/yoga
+    channel: yoga/edge
 
   glance-simplestreams-sync:
     charm: ch:glance-simplestreams-sync
@@ -98,7 +98,7 @@ applications:
       #     }]"
     to:
       - '5'
-    channel: stable/yoga
+    channel: yoga/edge
 
   octavia-diskimage-retrofit:
     charm: ../../../octavia-diskimage-retrofit.charm
