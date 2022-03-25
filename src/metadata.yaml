@@ -7,7 +7,7 @@ tags:
 - openstack
 series:
 - focal
-- impish
+- jammy
 subordinate: true
 requires:
   juju-info:
