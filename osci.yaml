@@ -1,22 +1,9 @@
 - project:
     templates:
-      - charm-unit-jobs
-    check:
-      jobs:
-      - charm-build
-      - impish-xena:
-          voting: false
-      - hirsute-wallaby:
-          voting: false
-      - focal-xena:
-          voting: false
-      - focal-wallaby:
-          voting: false
-      - focal-victoria
-      - focal-ussuri
-      - bionic-ussuri
-      - bionic-train
-      - bionic-stein
+      - charm-unit-jobs-py38
+      - charm-victoria-functional-jobs
+      - charm-wallaby-functional-jobs
     vars:
       needs_charm_build: true
       charm_build_name: octavia-diskimage-retrofit
+      build_type: charmcraft
