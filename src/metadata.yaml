@@ -8,9 +8,6 @@ tags:
 series:
 - bionic
 - focal
-- groovy
-- hirsute
-- impish
 subordinate: true
 requires:
   juju-info:
