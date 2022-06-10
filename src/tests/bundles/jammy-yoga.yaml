@@ -46,7 +46,7 @@ applications:
       openstack-origin: *openstack-origin
     to:
       - '3'
-    channel: yoga/edge
+    channel: latest/edge
 
   glance:
     charm: ch:glance
@@ -55,7 +55,7 @@ applications:
       openstack-origin: *openstack-origin
     to:
       - '4'
-    channel: yoga/edge
+    channel: latest/edge
 
   glance-simplestreams-sync:
     charm: ch:glance-simplestreams-sync
@@ -68,7 +68,7 @@ applications:
            path: 'streams/v1/index.sjson',
            max: 1,
            item_filters: [
-               'release~(focal|jammy)',
+               'release~(jammy)',
                'arch~(x86_64|amd64)',
                'ftype~(disk1.img|disk.img)'
                ]
@@ -98,11 +98,12 @@ applications:
       #     }]"
     to:
       - '5'
-    channel: yoga/edge
+    channel: latest/edge
 
   octavia-diskimage-retrofit:
-    charm: ../../../octavia-diskimage-retrofit_ubuntu-22.04-amd64.charm
+    charm: ../../../octavia-diskimage-retrofit_ubuntu-22.04-amd64_ubuntu-22.10-amd64.charm
     options:
+      retrofit-uca-pocket: yoga
       retrofit-series: jammy
 
 relations:

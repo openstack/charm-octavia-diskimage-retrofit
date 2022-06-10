@@ -6,8 +6,8 @@ description: |
 tags:
 - openstack
 series:
-- focal
 - jammy
+- kinetic
 subordinate: true
 requires:
   juju-info:
