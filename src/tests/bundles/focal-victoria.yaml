@@ -30,14 +30,14 @@ applications:
       - '0'
       - '1'
       - '2'
-    channel: 8.0.19/stable
+    channel: 8.0/edge
 
   keystone-mysql-router:
     charm: ch:mysql-router
-    channel: 8.0.19/stable
+    channel: 8.0/edge
   glance-mysql-router:
     charm: ch:mysql-router
-    channel: 8.0.19/stable
+    channel: 8.0/edge
 
   keystone:
     charm: ch:keystone
