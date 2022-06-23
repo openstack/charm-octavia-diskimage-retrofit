@@ -31,8 +31,6 @@ import charms_openstack.charm as charm
 
 # load reactive interfaces
 reactive.bus.discover()
-# load Endpoint based interface data
-ch_core.hookenv._run_atstart()
 
 # load charm class
 charms_openstack.bus.discover()
@@ -55,6 +53,7 @@ ACTIONS = {
 
 
 def main(args):
+    ch_core.hookenv._run_atstart()
     action_name = os.path.basename(args[0])
     try:
         action = ACTIONS[action_name]
@@ -71,6 +70,8 @@ def main(args):
                                     traceback.format_exc()),
                             level=ch_core.hookenv.ERROR)
         ch_core.hookenv.action_fail(str(e))
+    finally:
+        ch_core.hookenv._run_atexit()
 
 
 if __name__ == '__main__':
