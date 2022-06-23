@@ -1,3 +1,5 @@
+local_overlay_enabled: False
+
 series: bionic
 relations:
 - - glance-simplestreams-sync:juju-info
@@ -14,21 +16,24 @@ relations:
   - octavia-diskimage-retrofit:identity-credentials
 applications:
   keystone:
-    charm: cs:~openstack-charmers/keystone
+    charm: ch:keystone
     num_units: 1
     options:
       openstack-origin: cloud:bionic-rocky
+    channel: train/edge
   mysql:
     constraints: mem=3072M
-    charm: cs:~openstack-charmers/percona-cluster
+    charm: ch:percona-cluster
     num_units: 1
+    channel: 5.7/edge
   glance:
-    charm: cs:~openstack-charmers/glance
+    charm: ch:glance
     num_units: 1
     options:
       openstack-origin: cloud:bionic-rocky
+    channel: train/edge
   glance-simplestreams-sync:
-    charm: cs:~openstack-charmers/glance-simplestreams-sync
+    charm: ch:glance-simplestreams-sync
     num_units: 1
     options:
       source: ppa:simplestreams-dev/trunk
@@ -66,9 +71,10 @@ applications:
       #          'ftype~(disk1.img|disk.img)'
       #          ]
       #     }]"
+    channel: train/edge
   octavia-diskimage-retrofit:
     series: bionic
-    charm: ../../../octavia-diskimage-retrofit
+    charm: ../../../octavia-diskimage-retrofit.charm
     options:
       retrofit-series: bionic
       retrofit-uca-pocket: rocky
