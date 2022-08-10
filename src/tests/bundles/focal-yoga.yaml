@@ -30,14 +30,14 @@ applications:
       - '0'
       - '1'
       - '2'
-    channel: 8.0.19/edge
+    channel: 8.0/edge
 
   keystone-mysql-router:
     charm: ch:mysql-router
-    channel: 8.0.19/edge
+    channel: 8.0/edge
   glance-mysql-router:
     charm: ch:mysql-router
-    channel: 8.0.19/edge
+    channel: 8.0/edge
 
   keystone:
     charm: ch:keystone
@@ -68,7 +68,7 @@ applications:
            path: 'streams/v1/index.sjson',
            max: 1,
            item_filters: [
-               'release~(xenial|bionic|focal)',
+               'release~(focal)',
                'arch~(x86_64|amd64)',
                'ftype~(disk1.img|disk.img)'
                ]
@@ -101,7 +101,7 @@ applications:
     channel: yoga/edge
 
   octavia-diskimage-retrofit:
-    charm: ../../../octavia-diskimage-retrofit.charm
+    charm: ../../../octavia-diskimage-retrofit_ubuntu-20.04-amd64.charm
     options:
       retrofit-series: focal
 

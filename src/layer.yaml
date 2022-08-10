@@ -9,11 +9,10 @@ options:
   basic:
     use_venv: True
     include_system_packages: False
-    packages: [ 'libffi-dev', 'libssl-dev' ]
   snap:
     octavia-diskimage-retrofit:
-      channel: beta
-      devmode: True
+      channel: 1.0/stable
+      classic: true
 comment: |
   Using devmode pending resolution of snapd fuse-support issue
   https://github.com/openstack-charmers/octavia-diskimage-retrofit/issues/6
