@@ -1,7 +1,7 @@
 charm_name: octavia-diskimage-retrofit
 
 smoke_bundles:
-- focal-ussuri
+- bionic-train
 
 gate_bundles:
 - focal-ussuri
