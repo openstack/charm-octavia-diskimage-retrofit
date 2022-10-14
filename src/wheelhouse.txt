@@ -2,6 +2,14 @@
 keystoneauth1
 python-glanceclient
 
+# Need different versions of these to link to openssl on focal and jammy
+# Note these are dropped from the build.lock to allow different builds as
+# the charmcraft dictates different charm builds for each platform.
+cryptography==3.3.2; python_version == '3.8'
+pyOpenSSL==21.0.0; python_version == '3.8'
+cryptography==36.0.2; python_version == '3.10'
+pyOpenSSL==22.0.0; python_version == '3.10'
+
 git+https://github.com/openstack/charms.openstack.git@stable/yoga#egg=charms.openstack
 
 git+https://github.com/juju/charm-helpers.git@stable/yoga#egg=charmhelpers
