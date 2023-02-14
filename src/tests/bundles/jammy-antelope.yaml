@@ -1,9 +1,9 @@
 variables:
-  openstack-origin: &openstack-origin distro
+  openstack-origin: &openstack-origin cloud:jammy-antelope
 
 local_overlay_enabled: False
 
-series: kinetic
+series: jammy
 
 comment:
 - 'machines section to decide order of deployment. database sooner = faster'
@@ -68,7 +68,7 @@ applications:
            path: 'streams/v1/index.sjson',
            max: 1,
            item_filters: [
-               'release~(kinetic)',
+               'release~(jammy)',
                'arch~(x86_64|amd64)',
                'ftype~(disk1.img|disk.img)'
                ]
@@ -103,7 +103,8 @@ applications:
   octavia-diskimage-retrofit:
     charm: ../../../octavia-diskimage-retrofit_ubuntu-22.04-amd64_ubuntu-22.10-amd64_ubuntu-23.04-amd64.charm
     options:
-      retrofit-series: kinetic
+      retrofit-uca-pocket: antelope
+      retrofit-series: jammy
 
 relations:
 
