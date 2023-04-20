@@ -25,19 +25,19 @@ applications:
     charm: ch:mysql-innodb-cluster
     num_units: 3
     options:
-      source: *openstack-origin
+      source: distro
     to:
       - '0'
       - '1'
       - '2'
-    channel: latest/edge
+    channel: 8.0/edge
 
   keystone-mysql-router:
     charm: ch:mysql-router
-    channel: latest/edge
+    channel: 8.0/edge
   glance-mysql-router:
     charm: ch:mysql-router
-    channel: latest/edge
+    channel: 8.0/edge
 
   keystone:
     charm: ch:keystone
@@ -46,7 +46,7 @@ applications:
       openstack-origin: *openstack-origin
     to:
       - '3'
-    channel: latest/edge
+    channel: 2023.1/edge
 
   glance:
     charm: ch:glance
@@ -55,7 +55,7 @@ applications:
       openstack-origin: *openstack-origin
     to:
       - '4'
-    channel: latest/edge
+    channel: 2023.1/edge
 
   glance-simplestreams-sync:
     charm: ch:glance-simplestreams-sync
@@ -98,7 +98,7 @@ applications:
       #     }]"
     to:
       - '5'
-    channel: latest/edge
+    channel: 2023.1/edge
 
   octavia-diskimage-retrofit:
     charm: ../../../octavia-diskimage-retrofit_ubuntu-22.04-amd64_ubuntu-22.10-amd64_ubuntu-23.04-amd64.charm
