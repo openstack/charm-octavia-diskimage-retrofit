@@ -3,7 +3,12 @@ options:
     type: string
     default: ''
     description: |
-      Repository from which to retrieve ubuntu packages.
+      Repository from which to retrieve ubuntu packages. To pass
+      multiple pockets, '\n' can be used. e.g.
+      .
+      'deb http://example.com/ubuntu jammy main universe\ndeb
+      http://example.com/ubuntu jammy-security main universe\ndeb
+      http://example.com/ubuntu jammy-updates main universe'
   uca-mirror:
     type: string
     default: ''
