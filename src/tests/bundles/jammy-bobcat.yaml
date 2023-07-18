@@ -1,9 +1,9 @@
 variables:
-  openstack-origin: &openstack-origin distro
+  openstack-origin: &openstack-origin cloud:jammy-bobcat
 
 local_overlay_enabled: False
 
-series: lunar
+series: jammy
 
 comment:
 - 'machines section to decide order of deployment. database sooner = faster'
@@ -68,7 +68,7 @@ applications:
            path: 'streams/v1/index.sjson',
            max: 1,
            item_filters: [
-               'release~(lunar)',
+               'release~(jammy)',
                'arch~(x86_64|amd64)',
                'ftype~(disk1.img|disk.img)'
                ]
@@ -101,9 +101,10 @@ applications:
     channel: latest/edge
 
   octavia-diskimage-retrofit:
-    charm: ../../../octavia-diskimage-retrofit_ubuntu-23.04-amd64.charm
+    charm: ../../../octavia-diskimage-retrofit_ubuntu-22.04-amd64.charm
     options:
-      retrofit-series: lunar
+      retrofit-uca-pocket: antelope
+      retrofit-series: jammy
 
 relations:
 

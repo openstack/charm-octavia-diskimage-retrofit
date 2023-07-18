@@ -7,8 +7,8 @@ tags:
 - openstack
 series:
 - jammy
-- kinetic
 - lunar
+- mantic
 subordinate: true
 requires:
   juju-info:

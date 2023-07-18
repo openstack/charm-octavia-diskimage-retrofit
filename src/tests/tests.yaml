@@ -1,14 +1,15 @@
 charm_name: octavia-diskimage-retrofit
 
 smoke_bundles:
-- jammy-zed
+- jammy-antelope
 
 gate_bundles:
-- jammy-zed
+- jammy-antelope
 
 dev_bundles:
-- jammy-antelope
+- jammy-bobcat
 - lunar-antelope
+- mantic-bobcat
 
 target_deploy_status:
   glance-simplestreams-sync:
@@ -24,3 +25,4 @@ tests:
 tests_options:
   force_deploy:
     - lunar-antelope
+    - mantic-bobcat

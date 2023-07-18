@@ -1,9 +1,9 @@
 variables:
-  openstack-origin: &openstack-origin cloud:jammy-zed
+  openstack-origin: &openstack-origin distro
 
 local_overlay_enabled: False
 
-series: jammy
+series: mantic
 
 comment:
 - 'machines section to decide order of deployment. database sooner = faster'
@@ -68,7 +68,7 @@ applications:
            path: 'streams/v1/index.sjson',
            max: 1,
            item_filters: [
-               'release~(jammy)',
+               'release~(mantic)',
                'arch~(x86_64|amd64)',
                'ftype~(disk1.img|disk.img)'
                ]
@@ -101,10 +101,9 @@ applications:
     channel: latest/edge
 
   octavia-diskimage-retrofit:
-    charm: ../../../octavia-diskimage-retrofit_ubuntu-22.04-amd64_ubuntu-22.10-amd64_ubuntu-23.04-amd64.charm
+    charm: ../../../octavia-diskimage-retrofit_ubuntu-23.10-amd64.charm
     options:
-      retrofit-uca-pocket: zed
-      retrofit-series: jammy
+      retrofit-series: mantic
 
 relations:
 
