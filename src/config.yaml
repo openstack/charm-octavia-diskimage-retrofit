@@ -76,3 +76,7 @@ options:
       Frequency of the auto retrofit cron job execution
       .
       It is one of ['hourly', 'daily', 'weekly']
+  region:
+    default: RegionOne
+    type: string
+    description: OpenStack Region

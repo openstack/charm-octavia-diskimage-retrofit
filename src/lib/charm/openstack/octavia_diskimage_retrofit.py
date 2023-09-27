@@ -179,8 +179,10 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
         """
         session = glance_retrofitter.session_from_identity_credentials(
             keystone_endpoint)
+        region = self.config["region"] or None
         glance = glance_retrofitter.get_glance_client(
-            session, endpoint_type=self.endpoint_type())
+            session, endpoint_type=self.endpoint_type(),
+            region=region)
 
         ubuntu_release = self.get_ubuntu_release(
             series=self.config['retrofit-series'])
