@@ -52,6 +52,12 @@ options:
       .
       Default is 'ussuri' if ``retrofit-series`` is 'bionic', for other
       releases no UCA pocket will be added unless specified.
+  image-format:
+    type: string
+    default: qcow2
+    description: |
+      Disk image format that will be uploaded to Glance. When using ceph, it is recommended
+      to set this option to raw.
   amp-image-tag:
     type: string
     default: ''
