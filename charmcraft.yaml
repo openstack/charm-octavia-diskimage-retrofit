@@ -23,6 +23,7 @@ parts:
     build-environment:
       - CHARM_INTERFACES_DIR: $CRAFT_PROJECT_DIR/interfaces/
       - CHARM_LAYERS_DIR: $CRAFT_PROJECT_DIR/layers/
+      - CARGO_HTTP_MULTIPLEXING: "false"
 bases:
   - build-on:
       - name: ubuntu
