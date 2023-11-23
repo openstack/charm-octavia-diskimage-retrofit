@@ -297,9 +297,11 @@ class OctaviaDiskimageRetrofitCharm(charms_openstack.charm.OpenStackCharm):
                                source_image.version_name):
             # build a informative image name
             dest_name += '-' + str(image_property)
+        dest_arch = source_image.architecture
         dest_image = glance.images.create(container_format='bare',
                                           disk_format='qcow2',
-                                          name=dest_name)
+                                          name=dest_name,
+                                          architecture=dest_arch)
         ch_core.hookenv.status_set('maintenance',
                                    'Uploading {}'
                                    .format(dest_image.name))

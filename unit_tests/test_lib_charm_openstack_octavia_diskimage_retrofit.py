@@ -281,7 +281,8 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
                 container_format='bare',
                 disk_format='qcow2',
                 name='amphora-haproxy-aArchitecture-aOSDistro-aOSVersion-'
-                     'aVersionName')
+                     'aVersionName',
+                architecture='aArchitecture')
             glance.images.upload.assert_called_once_with('aId', mock.ANY)
             mocked_open.assert_called_once_with(
                 self.NamedTemporaryFile().name, 'rb')
