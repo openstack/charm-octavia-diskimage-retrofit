@@ -66,7 +66,7 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
         self.patch_object(
             octavia_diskimage_retrofit.subprocess, 'check_output')
         self.check_output.return_value = '20.04 LTS\n'
-        self.assertEquals(self.target.get_ubuntu_release(), '20.04')
+        self.assertEqual(self.target.get_ubuntu_release(), '20.04')
         self.check_output.assert_called_once_with(
             ['distro-info', '-r', '--lts'], universal_newlines=True)
         self.check_output.reset_mock()
@@ -113,8 +113,8 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
         self.patch_object(octavia_diskimage_retrofit.ch_core.hookenv,
                           'log')
         self.target.handle_auto_retrofit()
-        self.assertEquals(self.log.call_args[0][0],
-                          'symlink "' + current_link + '" already exists')
+        self.assertEqual(self.log.call_args[0][0],
+                         'symlink "' + current_link + '" already exists')
         self.symlink.reset_mock()
         self.is_leader.return_value = False
         self.target.handle_auto_retrofit()
@@ -132,8 +132,8 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
         self.unlink.side_effect = os_error
         self.patch_object(octavia_diskimage_retrofit.ch_core.hookenv, 'log')
         self.target.remove_cron_job(fake_link)
-        self.assertEquals(self.log.call_args[0][0],
-                          'symlink "' + fake_link + '" does not exist')
+        self.assertEqual(self.log.call_args[0][0],
+                         'symlink "' + fake_link + '" does not exist')
 
     def test_render_shell_wrapper(self):
         unit_name = 'octavia-diskimage-retrofit/0'
