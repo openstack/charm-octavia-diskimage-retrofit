@@ -5,8 +5,6 @@ description: |
   Tool for retrofitting cloud image for use as Octavia Amphora
 tags:
   - openstack
-series:
-  - jammy
 subordinate: true
 requires:
   juju-info:

@@ -46,7 +46,7 @@ applications:
       openstack-origin: *openstack-origin
     to:
       - '3'
-    channel: 2024.1/edge
+    channel: latest/edge
 
   glance:
     charm: ch:glance
@@ -55,7 +55,7 @@ applications:
       openstack-origin: *openstack-origin
     to:
       - '4'
-    channel: 2024.1/edge
+    channel: latest/edge
 
   glance-simplestreams-sync:
     charm: ch:glance-simplestreams-sync
@@ -98,10 +98,10 @@ applications:
       #     }]"
     to:
       - '5'
-    channel: 2024.1/edge
+    channel: latest/edge
 
   octavia-diskimage-retrofit:
-    charm: ../../../octavia-diskimage-retrofit_ubuntu-22.04-amd64.charm
+    charm: ../../../octavia-diskimage-retrofit.charm
     options:
       retrofit-uca-pocket: antelope
       retrofit-series: jammy
