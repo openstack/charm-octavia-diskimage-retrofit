@@ -21,6 +21,7 @@ parts:
       # Note(mylesjp): Force build to use rustc-1.76
       ln -s /usr/bin/rustc-1.76 /usr/bin/rustc
       ln -s /usr/bin/cargo-1.76 /usr/bin/cargo
+      craftctl default
     source: src/
     build-snaps:
       - charm/latest/edge
