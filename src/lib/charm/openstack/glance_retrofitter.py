@@ -47,18 +47,21 @@ def session_from_identity_credentials(identity_credentials):
     return session
 
 
-def get_glance_client(session, endpoint_type=None):
+def get_glance_client(session, endpoint_type=None, region=None):
     """Get Glance Client from Keystone Session.
 
     :param session: Keystone Session object
     :type session: keystoneauth1.session.Session
     :param endpoint_type: Type of endpoint the client should connect to
     :type endpoint_type: Optional[str]
+    :param region: The OpenStack region
+    :type region: Optional[str]
     :returns: Glance Client
     :rtype: glanceclient.Client
     """
     endpoint = session.auth.get_endpoint(
-        session, service_type='image', interface=endpoint_type or 'publicURL')
+        session, service_type='image', interface=endpoint_type or 'publicURL',
+        region_name=region)
     return glanceclient.Client(
         '2', session=session, endpoint=endpoint)
 

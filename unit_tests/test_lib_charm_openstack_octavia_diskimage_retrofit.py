@@ -245,7 +245,7 @@ class TestOctaviaDiskimageRetrofitCharm(test_utils.PatchHelper):
                 assert_called_once_with('aKeystone')
             self.glance_retrofitter.get_glance_client.assert_called_once_with(
                 self.glance_retrofitter.session_from_identity_credentials(),
-                endpoint_type='publicURL')
+                endpoint_type='publicURL', region=None)
             self.glance_retrofitter.find_destination_image.return_value = \
                 []
             self.hookenv.env_proxy_settings.return_value = proxy_envvars

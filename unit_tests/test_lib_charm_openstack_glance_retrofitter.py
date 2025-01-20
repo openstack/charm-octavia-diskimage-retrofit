@@ -52,7 +52,8 @@ class TestGlanceRetrofitter(test_utils.PatchHelper):
         result = glance_retrofitter.get_glance_client(
             session, endpoint_type='aEndpointType')
         session.auth.get_endpoint.assert_called_once_with(
-            session, service_type='image', interface='aEndpointType')
+            session, service_type='image', interface='aEndpointType',
+            region_name=None)
         self.Client.assert_called_once_with(
             '2', session=session, endpoint=session.auth.get_endpoint())
         self.assertEqual(result, self.Client())
@@ -60,7 +61,8 @@ class TestGlanceRetrofitter(test_utils.PatchHelper):
         result = glance_retrofitter.get_glance_client(
             session)
         session.auth.get_endpoint.assert_called_once_with(
-            session, service_type='image', interface='publicURL')
+            session, service_type='image', interface='publicURL',
+            region_name=None)
 
     def test_get_product_name(self):
         self.patch_object(glance_retrofitter.subprocess, 'check_output')
