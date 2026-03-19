@@ -1,0 +1,6 @@
+# Constrain maturin to a version that uses Rust edition 2021 (not 2024),
+# as the Jammy (22.04) build container ships Cargo 1.75 which does not support
+# edition2024 (requires Cargo >= 1.85).
+# maturin >= 1.9.0 switched its Cargo.toml to edition2024, breaking the build
+# when rpds-py or other Rust-backed packages need to compile maturin from source.
+maturin<1.9.0
