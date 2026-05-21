@@ -44,7 +44,7 @@ class TestGlanceRetrofitter(test_utils.PatchHelper):
         self.Session.assert_called_once_with(
             auth=loader.load_from_options(),
             verify=glance_retrofitter.SYSTEM_CA_BUNDLE)
-        self.assertEquals(result, self.Session())
+        self.assertEqual(result, self.Session())
 
     def test_get_glance_client(self):
         self.patch_object(glance_retrofitter.glanceclient, 'Client')
@@ -55,7 +55,7 @@ class TestGlanceRetrofitter(test_utils.PatchHelper):
             session, service_type='image', interface='aEndpointType')
         self.Client.assert_called_once_with(
             '2', session=session, endpoint=session.auth.get_endpoint())
-        self.assertEquals(result, self.Client())
+        self.assertEqual(result, self.Client())
         session.reset_mock()
         result = glance_retrofitter.get_glance_client(
             session)
@@ -65,8 +65,8 @@ class TestGlanceRetrofitter(test_utils.PatchHelper):
     def test_get_product_name(self):
         self.patch_object(glance_retrofitter.subprocess, 'check_output')
         self.check_output.return_value = 'aArchitecture'
-        self.assertEquals(glance_retrofitter.get_product_name(),
-                          'com.ubuntu.cloud.daily:server:18.04:aArchitecture')
+        self.assertEqual(glance_retrofitter.get_product_name(),
+                         'com.ubuntu.cloud.daily:server:18.04:aArchitecture')
         self.check_output.assert_called_once_with(
             ['dpkg', '--print-architecture'],
             universal_newlines=True)
@@ -83,7 +83,7 @@ class TestGlanceRetrofitter(test_utils.PatchHelper):
         fake_image2 = FakeImage2()
 
         glance.images.list.return_value = [fake_image1, fake_image2]
-        self.assertEquals(
+        self.assertEqual(
             glance_retrofitter.find_image(glance, {'fake_property': 'real'}),
             fake_image2)
         glance.images.list.assert_called_once_with(
@@ -98,14 +98,14 @@ class TestGlanceRetrofitter(test_utils.PatchHelper):
         glance.images.list.assert_called_once_with(
             filters={'source_product_name': 'aProduct',
                      'source_version_name': 'aVersion'})
-        self.assertEquals(result, glance.images.list())
+        self.assertEqual(result, glance.images.list())
 
     def test_find_source_image(self):
         self.patch_object(glance_retrofitter, 'get_product_name')
         self.patch_object(glance_retrofitter, 'find_image')
         self.get_product_name.return_value = 'aProduct'
         self.find_image.side_effect = [None, None, None, 'aImage']
-        self.assertEquals(
+        self.assertEqual(
             glance_retrofitter.find_source_image('aGlance', '42.04'),
             'aImage')
         self.get_product_name.assert_has_calls([

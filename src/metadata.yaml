@@ -4,9 +4,10 @@ maintainer: OpenStack Charmers <openstack-charmers@lists.ubuntu.com>
 description: |
   Tool for retrofitting cloud image for use as Octavia Amphora
 tags:
-  - openstack
+- openstack
 series:
-  - jammy
+- jammy
+- noble
 subordinate: true
 requires:
   juju-info:
