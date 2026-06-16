@@ -4,6 +4,7 @@ parts:
   charm:
     plugin: reactive
     reactive-charm-build-arguments:
+      - --verbose
       - --binary-wheels-from-source
       - --use-lock-file-branches
     build-packages:
@@ -11,10 +12,7 @@ parts:
       - git
       - python3-dev
       - libffi-dev
-      - libpython3-dev
       - libssl-dev
-      - libxml2-dev
-      - libxslt1-dev
       - rustc
       - cargo
       - pkg-config
@@ -24,7 +22,6 @@ parts:
     build-environment:
       - CHARM_INTERFACES_DIR: $CRAFT_PROJECT_DIR/interfaces/
       - CHARM_LAYERS_DIR: $CRAFT_PROJECT_DIR/layers/
-      - CARGO_HTTP_MULTIPLEXING: "false"
 platforms:
   ubuntu@22.04:amd64:
   ubuntu@22.04:arm64:
