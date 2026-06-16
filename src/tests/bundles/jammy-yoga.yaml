@@ -101,7 +101,7 @@ applications:
     channel: zed/edge
 
   octavia-diskimage-retrofit:
-    charm: ../../../octavia-diskimage-retrofit_ubuntu-22.04-amd64_ubuntu-22.10-amd64.charm
+    charm: ../../../octavia-diskimage-retrofit_ubuntu@22.04-amd64.charm
     options:
       retrofit-uca-pocket: yoga
       retrofit-series: jammy
