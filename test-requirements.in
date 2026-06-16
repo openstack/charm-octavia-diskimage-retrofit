@@ -33,3 +33,5 @@ jsonschema<=4.10 # Avoid Rust requirement error on Noble
 lxml             # keystone-saml-mellon
 hvac             # vault, barbican-vault
 psutil           # cinder-lvm
+setuptools<82.0.0
+flake8==7.1.1

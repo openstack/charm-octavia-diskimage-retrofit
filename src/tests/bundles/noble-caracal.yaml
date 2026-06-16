@@ -101,7 +101,7 @@ applications:
     channel: latest/edge
 
   octavia-diskimage-retrofit:
-    charm: ../../../octavia-diskimage-retrofit.charm
+    charm: ../../../octavia-diskimage-retrofit_ubuntu@24.04-amd64.charm
     options:
       channel: 2.0/edge
       retrofit-uca-pocket: caracal
