@@ -101,9 +101,10 @@ applications:
     channel: 2024.1/edge
 
   octavia-diskimage-retrofit:
-    charm: ../../../octavia-diskimage-retrofit_ubuntu-24.04-amd64.charm
+    charm: ../../../octavia-diskimage-retrofit_ubuntu@24.04-amd64.charm
     options:
-      retrofit-uca-pocket: antelope
+      channel: 2.0/edge
+      retrofit-uca-pocket: caracal
       retrofit-series: noble
 
 relations:

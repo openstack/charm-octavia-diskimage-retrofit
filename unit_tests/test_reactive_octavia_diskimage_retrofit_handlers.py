@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import unittest
 from unittest import mock
 
 import reactive.octavia_diskimage_retrofit_handlers as handlers
@@ -45,6 +46,8 @@ class TestRegisteredHooks(test_utils.TestRegisteredHooks):
             'when_not': {
                 'request_credentials': (
                     'identity-credentials.available',),
+                'snap_install': (
+                    'snap.installed.octavia-diskimage-retrofit',),
             },
         }
         # test that the hooks were registered via the
@@ -76,3 +79,27 @@ class TestOctaviaDiskimageRetrofitHandlers(test_utils.PatchHelper):
     def test_credentials_available(self):
         handlers.credentials_available()
         self.charm_instance.assess_status.assert_called_once_with()
+
+
+class TestValidateSnapRisk(unittest.TestCase):
+
+    def test_valid_risk_only(self):
+        for risk in ('stable', 'candidate', 'beta', 'edge'):
+            with self.subTest(risk=risk):
+                self.assertTrue(handlers.validate_snap_risk(risk))
+
+    def test_valid_channel_with_track(self):
+        self.assertTrue(handlers.validate_snap_risk('0.10/stable'))
+        self.assertTrue(handlers.validate_snap_risk('latest/edge'))
+        self.assertTrue(handlers.validate_snap_risk('1.0/candidate'))
+        self.assertTrue(handlers.validate_snap_risk('2/beta'))
+
+    def test_invalid_risk_only(self):
+        self.assertFalse(handlers.validate_snap_risk('invalid'))
+        self.assertFalse(handlers.validate_snap_risk(''))
+        self.assertFalse(handlers.validate_snap_risk('stable/edge'))
+
+    def test_invalid_risk_with_track(self):
+        self.assertFalse(handlers.validate_snap_risk('0.10/invalid'))
+        self.assertFalse(handlers.validate_snap_risk('latest/'))
+        self.assertFalse(handlers.validate_snap_risk('latest/nightly'))
