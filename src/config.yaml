@@ -1,4 +1,9 @@
 options:
+  channel:
+    type: string
+    default:
+    description: >-
+      The snap channel to install from.
   ubuntu-mirror:
     type: string
     default: ''

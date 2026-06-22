@@ -68,7 +68,7 @@ applications:
            path: 'streams/v1/index.sjson',
            max: 1,
            item_filters: [
-               'release~(jammy)',
+               'release~(noble)',
                'arch~(x86_64|amd64)',
                'ftype~(disk1.img|disk.img)'
                ]
@@ -103,8 +103,9 @@ applications:
   octavia-diskimage-retrofit:
     charm: ../../../octavia-diskimage-retrofit.charm
     options:
-      retrofit-uca-pocket: antelope
-      retrofit-series: jammy
+      channel: 2.0/edge
+      retrofit-uca-pocket: caracal
+      retrofit-series: noble
 
 relations:
 

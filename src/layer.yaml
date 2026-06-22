@@ -9,10 +9,6 @@ options:
   basic:
     use_venv: True
     include_system_packages: False
-  snap:
-    octavia-diskimage-retrofit:
-      channel: 1.0/stable
-      classic: true
 comment: |
   Using devmode pending resolution of snapd fuse-support issue
   https://github.com/openstack-charmers/octavia-diskimage-retrofit/issues/6

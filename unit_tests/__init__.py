@@ -30,3 +30,11 @@ sys.modules['glanceclient'] = glanceclient
 sys.modules['keystoneauth1'] = keystoneauth1
 sys.modules['keystoneauth1.loading'] = keystoneauth1.loading
 sys.modules['keystoneauth1.session'] = keystoneauth1.session
+
+# Mock out charms.layer modules
+charms_layer = mock.MagicMock()
+charms_layer_snap = mock.MagicMock()
+charms_layer_basic = mock.MagicMock()
+sys.modules['charms.layer'] = charms_layer
+sys.modules['charms.layer.snap'] = charms_layer_snap
+sys.modules['charms.layer.basic'] = charms_layer_basic
