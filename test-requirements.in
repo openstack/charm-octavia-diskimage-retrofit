@@ -28,7 +28,7 @@ netifaces        # vault
 psycopg2-binary  # vault
 tenacity         # vault
 pbr==5.6.0       # vault
-cryptography<3.4 # vault, keystone-saml-mellon
+cryptography<48.1 # vault, keystone-saml-mellon
 jsonschema<=4.10 # Avoid Rust requirement error on Noble
 lxml             # keystone-saml-mellon
 hvac             # vault, barbican-vault
